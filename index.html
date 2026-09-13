@@ -132,6 +132,8 @@
   .priority-pill.p-alta{background:rgba(255,138,0,.16);color:#a15300;}
   .priority-pill.p-urgente{background:var(--danger);color:#fff;}
   .card-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:1rem;line-height:1.36;letter-spacing:-.005em;margin:0 0 8px;}
+  .card-address{display:flex;align-items:flex-start;gap:5px;font-size:11.5px;color:var(--ink-45);margin:0 0 8px;line-height:1.35;}
+  .card-address svg{width:12px;height:12px;flex:none;margin-top:2px;}
   .card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .due-tag{display:inline-flex;align-items:center;gap:5px;font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:999px;background:var(--paper-dim);color:var(--ink-60);}
   .due-tag svg{width:10px;height:10px;}
@@ -497,6 +499,10 @@
       </div>
     </div>
     <div class="field">
+      <label for="demandAddress">Endereço / local (opcional)</label>
+      <input type="text" id="demandAddress" placeholder="Ex.: Rua das Flores, 123 — salão de festas, Aldeota">
+    </div>
+    <div class="field">
       <label for="demandBriefing">Briefing / o que é necessário</label>
       <textarea id="demandBriefing" placeholder="Referências, tom de voz, materiais que o cliente vai enviar, links..."></textarea>
     </div>
@@ -548,12 +554,12 @@
       <button class="modal-close" id="clientCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
     </div>
     <div class="field">
-      <label for="clientName">Nome / marca</label>
-      <input type="text" id="clientName" placeholder="Ex.: Studio Kuartim">
+      <label for="clientName">Nome do cliente</label>
+      <input type="text" id="clientName" placeholder="Ex.: Studio Kuartim ou Ana Paula Souza">
     </div>
     <div class="field">
-      <label for="clientHandle">Instagram / handle</label>
-      <input type="text" id="clientHandle" placeholder="@marca">
+      <label for="clientHandle">Instagram (opcional)</label>
+      <input type="text" id="clientHandle" placeholder="@usuario — deixe em branco se não tiver">
     </div>
     <div class="field">
       <label for="clientContact">Contato (WhatsApp / e-mail)</label>
@@ -881,6 +887,7 @@
     var lines = ['*Lembrete Dgr Creative*', d.title];
     if(client) lines.push('Cliente: ' + client.name);
     if(d.dueDate) lines.push('Prazo: ' + formatDatePt(d.dueDate) + (d.dueTime ? ' às ' + d.dueTime : ''));
+    if(d.address) lines.push('Local: ' + d.address);
     lines.push('Frente: ' + (d.workType === 'captacao' ? 'Captação de vídeo' : 'Social Media'));
     lines.push('Prioridade: ' + d.priority);
     if(d.briefing) lines.push('Briefing: ' + d.briefing);
@@ -1199,6 +1206,7 @@
       var doneCount = checklist.filter(function(i){ return i.done; }).length;
       checklistHtml = '<div class="checklist-progress"><div class="checklist-progress-bar"><span style="width:' + Math.round(doneCount / checklist.length * 100) + '%"></span></div><b>' + doneCount + '/' + checklist.length + '</b></div>';
     }
+    var addressHtml = d.address ? '<div class="card-address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>' + escapeHtml(d.address) + '</span></div>' : '';
     return '' +
       '<div class="card prio-' + d.priority + (d.status === 'cancelled' ? ' cancelled' : '') + '" draggable="true" data-id="' + d.id + '">' +
         '<div class="card-top">' +
@@ -1212,6 +1220,7 @@
         '</div>' +
         tagsHtml +
         '<p class="card-title">' + (d.templateId ? '🔁 ' : '') + escapeHtml(d.title) + '</p>' +
+        addressHtml +
         checklistHtml +
         '<div class="card-meta">' +
           '<span class="due-tag' + dueClass + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>' + escapeHtml(dueText) + '</span>' +
@@ -1542,6 +1551,7 @@
     document.getElementById('demandPriority').value = d.priority || 'normal';
     document.getElementById('demandDue').value = d.dueDate || '';
     document.getElementById('demandTime').value = d.dueTime || '';
+    document.getElementById('demandAddress').value = d.address || '';
     document.getElementById('demandStatus').value = d.status || 'todo';
     document.getElementById('demandBriefing').value = d.briefing || '';
     document.getElementById('demandLink').value = d.link || '';
@@ -1567,6 +1577,7 @@
       priority: document.getElementById('demandPriority').value,
       due: document.getElementById('demandDue').value,
       time: document.getElementById('demandTime').value,
+      address: document.getElementById('demandAddress').value,
       status: document.getElementById('demandStatus').value,
       briefing: document.getElementById('demandBriefing').value,
       link: document.getElementById('demandLink').value,
@@ -1592,6 +1603,7 @@
       priority: document.getElementById('demandPriority').value,
       dueDate: document.getElementById('demandDue').value,
       dueTime: document.getElementById('demandTime').value,
+      address: document.getElementById('demandAddress').value.trim(),
       briefing: document.getElementById('demandBriefing').value.trim()
     };
   }
@@ -1607,6 +1619,7 @@
       priority: document.getElementById('demandPriority').value,
       dueDate: document.getElementById('demandDue').value,
       dueTime: document.getElementById('demandTime').value,
+      address: document.getElementById('demandAddress').value.trim(),
       status: document.getElementById('demandStatus').value,
       briefing: document.getElementById('demandBriefing').value.trim(),
       link: document.getElementById('demandLink').value.trim(),
