@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demandas — Dgr Creative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000; --paper:#f6f9f5; --paper-dim:#e7ece4;
+    --volt:#2100ff; --volt-deep:#160092; --acid:#f7ff1c;
+    --done:#1f9d55; --warn:#ff8a00; --danger:#e13b3b;
+    --ink-70:rgba(0,0,0,.72); --ink-60:rgba(0,0,0,.62); --ink-45:rgba(0,0,0,.45); --ink-35:rgba(0,0,0,.35);
+    --border:rgba(0,0,0,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Manrope',ui-sans-serif,system-ui,sans-serif;font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  img{max-width:100%;display:block;}
+  h1,h2,h3{font-family:'Unbounded',sans-serif;margin:0;letter-spacing:-.02em;}
+  button{font-family:inherit;}
+  ::selection{background:var(--acid);color:#000;}
+  .mono{font-family:'JetBrains Mono',monospace;letter-spacing:.06em;font-weight:600;}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 clamp(16px,4vw,48px);}
+  @media (prefers-reduced-motion: reduce){*{transition-duration:.001ms !important;animation:none !important;}}
+
+  .topbar{position:sticky;top:0;z-index:70;background:rgba(246,249,245,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#000;}
+  .brand-mark{width:40px;height:40px;border-radius:12px;background:var(--volt);display:flex;align-items:center;justify-content:center;flex:none;}
+  .brand-mark span{font-family:'Unbounded',sans-serif;font-weight:900;font-size:13px;color:var(--acid);}
+  .brand-name{font-family:'Unbounded',sans-serif;font-weight:700;font-size:14.5px;letter-spacing:-.02em;line-height:1.1;}
+  .brand-sub{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-45);}
+  .back-link{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink-60);display:inline-flex;align-items:center;gap:8px;}
+  .back-link:hover{color:var(--volt);}
+  .back-link svg{width:13px;height:13px;}
+
+  .hero{position:relative;background:var(--volt);color:var(--paper);overflow:hidden;padding:clamp(30px,5vw,46px) 0;}
+  .hero-blob{position:absolute;pointer-events:none;border-radius:42% 58% 61% 39%/45% 40% 60% 55%;}
+  .hero-blob.a{width:260px;height:260px;top:-120px;right:-90px;background:var(--acid);opacity:.85;}
+  .hero-blob.b{width:160px;height:160px;bottom:-90px;left:-60px;background:var(--volt-deep);opacity:.5;}
+  .hero-inner{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--acid);display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .eyebrow span{width:22px;height:1.5px;background:var(--acid);display:inline-block;}
+  .hero h1{font-weight:800;font-size:clamp(1.5rem,3.4vw,2.15rem);line-height:1.08;}
+  .hero p{margin:10px 0 0;max-width:52ch;font-size:.92rem;color:rgba(246,249,245,.76);}
+
+  main{padding:clamp(22px,4vw,34px) 0 clamp(60px,8vw,90px);}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;}
+  .tabs{display:flex;gap:6px;background:#fff;border:1.5px solid var(--ink);border-radius:999px;padding:4px;}
+  .tab-btn{border:none;background:transparent;padding:9px 18px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;color:var(--ink-60);}
+  .tab-btn.active{background:var(--ink);color:var(--acid);}
+  .toolbar-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .search-field{position:relative;}
+  .search-field input{font-family:'Manrope',sans-serif;font-size:13.5px;padding:10px 14px 10px 36px;border:1.5px solid var(--border);border-radius:999px;width:220px;background:#fff;}
+  .search-field input:focus{outline:none;border-color:var(--volt);}
+  .search-field svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--ink-45);}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.05em;padding:11px 18px;border-radius:999px;text-decoration:none;border:none;cursor:pointer;transition:transform .15s ease,background .15s ease;white-space:nowrap;}
+  .btn svg{width:13px;height:13px;}
+  .btn-acid{background:var(--acid);color:#000;}
+  .btn-acid:hover{transform:translateY(-2px);background:#fff;}
+  .btn-dark{background:var(--ink);color:#fff;}
+  .btn-dark:hover{transform:translateY(-2px);background:var(--volt);}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border);}
+  .btn-ghost:hover{border-color:var(--ink);}
+  .btn-sm{padding:7px 12px;font-size:10.5px;}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .board-columns{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;}
+  @media (max-width:900px){.board-columns{grid-auto-flow:column;grid-auto-columns:82vw;grid-template-columns:none;}}
+  .board-col{background:var(--paper-dim);border-radius:18px;padding:12px;display:flex;flex-direction:column;min-height:200px;}
+  .col-head{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-70);}
+  .col-head .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;}
+  .col-todo .dot{background:var(--ink-35);}
+  .col-doing .dot{background:var(--volt);}
+  .col-review .dot{background:var(--acid);border:1px solid rgba(0,0,0,.3);}
+  .col-done .dot{background:var(--done);}
+  .col-count{background:#fff;border-radius:999px;padding:2px 9px;font-size:10px;color:var(--ink-45);}
+  .col-body{display:flex;flex-direction:column;gap:10px;flex:1;min-height:80px;border-radius:12px;transition:background .12s ease;padding:2px;}
+  .col-body.drag-over{background:rgba(33,0,255,.08);}
+  .empty-hint{margin:14px 6px;font-size:.82rem;color:var(--ink-45);}
+
+  .card{background:#fff;border:1.5px solid var(--border);border-left-width:4px;border-radius:14px;padding:13px 14px;cursor:grab;transition:border-color .12s ease,box-shadow .12s ease;}
+  .card:hover{border-color:var(--ink);box-shadow:0 10px 22px -16px rgba(0,0,0,.35);}
+  .card.dragging{opacity:.4;}
+  .card.prio-baixa{border-left-color:var(--ink-35);}
+  .card.prio-normal{border-left-color:var(--volt);}
+  .card.prio-alta{border-left-color:var(--warn);}
+  .card.prio-urgente{border-left-color:var(--danger);}
+  .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .client-chip{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--ink-60);}
+  .client-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex:none;}
+  .priority-dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .p-baixa{background:var(--ink-35);}
+  .p-normal{background:var(--volt);}
+  .p-alta{background:var(--warn);}
+  .p-urgente{background:var(--danger);}
+  .priority-pill{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;flex:none;white-space:nowrap;}
+  .priority-pill.p-alta{background:rgba(255,138,0,.16);color:#a15300;}
+  .priority-pill.p-urgente{background:var(--danger);color:#fff;}
+  .card-title{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.92rem;line-height:1.32;letter-spacing:-.01em;margin:0 0 8px;}
+  .card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .due-tag{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:4px 8px;border-radius:999px;background:var(--paper-dim);color:var(--ink-60);}
+  .due-tag svg{width:10px;height:10px;}
+  .due-overdue{background:rgba(225,59,59,.14);color:var(--danger);}
+  .due-soon{background:rgba(255,138,0,.16);color:#a15300;}
+  .card-actions{display:flex;gap:4px;}
+  .icon-btn{border:none;background:transparent;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-45);}
+  .icon-btn:hover{background:var(--paper-dim);color:var(--ink);}
+  .icon-btn svg{width:13px;height:13px;}
+  .icon-btn.wa-btn:hover{background:rgba(37,211,102,.16);color:#1da851;}
+
+  .urgency-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .urg-chip{border:1.5px solid var(--border);background:#fff;padding:7px 14px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;color:var(--ink-60);}
+  .urg-chip.active{background:var(--ink);color:var(--acid);border-color:var(--ink);}
+  .urg-chip[data-urg="urgente"].active{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .urg-chip[data-urg="alta"].active{background:var(--warn);border-color:var(--warn);color:#000;}
+
+  .alert-banner{display:none;background:#fff;border:1.5px solid var(--danger);border-radius:16px;padding:14px 16px;margin-bottom:18px;}
+  .alert-banner.show{display:block;}
+  .alert-banner-head{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--danger);margin-bottom:10px;}
+  .alert-banner-head svg{width:15px;height:15px;}
+  .alert-list{display:flex;flex-direction:column;gap:6px;}
+  .alert-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(225,59,59,.06);border-radius:10px;padding:8px 10px;}
+  .alert-item-info{font-size:.85rem;cursor:pointer;flex:1;min-width:0;}
+  .alert-item-info b{font-weight:700;}
+  .alert-item-info span{display:block;font-size:.76rem;color:var(--ink-45);}
+
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .cal-nav{display:flex;align-items:center;gap:10px;}
+  .cal-label{font-family:'Unbounded',sans-serif;font-weight:700;font-size:1.1rem;text-transform:capitalize;min-width:170px;text-align:center;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .cal-dow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-45);text-align:center;padding-bottom:6px;}
+  .cal-cell{background:#fff;border:1px solid var(--border);border-radius:12px;min-height:88px;padding:8px;cursor:pointer;display:flex;flex-direction:column;gap:4px;}
+  .cal-cell:hover{border-color:var(--volt);}
+  .cal-cell.other{background:var(--paper-dim);opacity:.55;}
+  .cal-cell.today{border-color:var(--volt);border-width:2px;}
+  .cal-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-60);}
+  .cal-items{display:flex;flex-direction:column;gap:3px;}
+  .cal-chip{font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;padding:3px 6px;border-radius:6px;background:var(--paper-dim);color:var(--ink-70);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cal-chip.status-done{text-decoration:line-through;opacity:.55;}
+  .cal-chip.status-doing{background:rgba(33,0,255,.12);}
+  .cal-chip.status-review{background:rgba(247,255,28,.5);}
+  @media (max-width:760px){.cal-cell{min-height:60px;}.cal-chip{display:none;}.cal-cell.has-items::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--volt);}}
+
+  .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+  .client-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;}
+  .client-card:hover{border-color:var(--ink);}
+  .client-head{display:flex;align-items:center;gap:12px;}
+  .client-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:700;font-size:13px;color:#fff;flex:none;}
+  .client-name{font-family:'Unbounded',sans-serif;font-weight:700;font-size:.95rem;}
+  .client-handle{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--volt);}
+  .client-notes{font-size:.84rem;color:var(--ink-60);flex:1;}
+  .client-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px;border-top:1px dashed var(--border);}
+  .client-count{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-45);}
+  .client-new-tile{border:1.5px dashed var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--ink-45);cursor:pointer;min-height:150px;background:transparent;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+  .client-new-tile:hover{border-color:var(--volt);color:var(--volt);}
+  .client-new-tile svg{width:22px;height:22px;}
+
+  .mic-fab{position:fixed;right:22px;bottom:22px;z-index:80;width:64px;height:64px;border-radius:50%;background:var(--acid);border:2px solid var(--ink);color:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 16px 30px -12px rgba(0,0,0,.4);transition:transform .15s ease;}
+  .mic-fab:hover{transform:translateY(-3px) scale(1.03);}
+  .mic-fab svg{width:26px;height:26px;}
+  .mic-fab.listening{background:var(--danger);color:#fff;border-color:var(--danger);animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(225,59,59,.5);}50%{box-shadow:0 0 0 14px rgba(225,59,59,0);}}
+
+  .overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;}
+  .overlay[hidden]{display:none;}
+  .voice-panel{background:#fff;border-radius:22px;padding:clamp(26px,4vw,36px);max-width:440px;width:100%;text-align:center;}
+  .voice-orb{width:70px;height:70px;border-radius:50%;background:var(--acid);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:pulse 1.4s ease-in-out infinite;}
+  .voice-orb svg{width:28px;height:28px;}
+  .voice-transcript{min-height:60px;background:var(--paper-dim);border-radius:12px;padding:14px;font-size:.94rem;color:var(--ink-70);margin:16px 0;text-align:left;}
+  .voice-hint{font-size:.8rem;color:var(--ink-45);margin-top:6px;}
+
+  .modal-overlay{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding:26px 16px;overflow-y:auto;}
+  .modal-overlay[hidden]{display:none;}
+  .modal-card{background:#fff;border-radius:22px;max-width:560px;width:100%;padding:clamp(24px,4vw,32px);margin:auto;}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .modal-head h2{font-size:1.15rem;}
+  .modal-close{border:none;background:var(--paper-dim);width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-60);}
+  .modal-close svg{width:14px;height:14px;}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .field label{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-60);}
+  .field input,.field select,.field textarea{font-family:'Manrope',sans-serif;font-size:14.5px;color:#000;border:1.5px solid var(--border);border-radius:12px;padding:11px 13px;background:#fff;width:100%;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--volt);}
+  .field textarea{resize:vertical;min-height:80px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:480px){.grid-2{grid-template-columns:1fr;}}
+  .modal-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .voice-note{display:flex;gap:8px;align-items:flex-start;background:rgba(33,0,255,.06);border-radius:10px;padding:10px 12px;font-size:.78rem;color:var(--ink-60);margin-bottom:14px;}
+  .voice-note svg{width:14px;height:14px;flex:none;color:var(--volt);margin-top:1px;}
+
+  #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:#000;color:var(--acid);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.03em;padding:13px 22px;border-radius:999px;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:200;max-width:88vw;text-align:center;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);}
+  #toast.show{opacity:1;transform:translate(-50%,0);}
+
+  .day-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .day-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper-dim);border-radius:10px;padding:10px 12px;cursor:pointer;}
+  .day-item:hover{background:#e2e9dd;}
+
+  .check-row{display:flex;align-items:flex-start;gap:10px;background:var(--paper-dim);border-radius:12px;padding:12px 14px;margin-bottom:14px;}
+  .check-row input{width:18px;height:18px;margin-top:1px;flex:none;accent-color:#25d366;}
+  .check-row label{font-size:.86rem;color:var(--ink-70);cursor:pointer;}
+  .check-row label b{display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:2px;}
+  .field-hint{font-size:.78rem;color:var(--ink-45);margin-top:4px;}
+
+  .tag-chip{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.03em;padding:3px 8px;border-radius:999px;background:var(--paper-dim);color:var(--ink-70);white-space:nowrap;}
+  .tag-chip .tag-dot{width:6px;height:6px;border-radius:50%;flex:none;}
+  .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 8px;}
+  .tag-input-row{display:flex;gap:8px;margin-bottom:10px;}
+  .tag-input-row input{flex:1;}
+  .tag-list-edit{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .tag-chip.removable{cursor:pointer;padding-right:6px;}
+  .tag-chip.removable:hover{background:rgba(225,59,59,.14);color:var(--danger);}
+
+  .checklist{display:flex;flex-direction:column;gap:6px;margin-bottom:6px;}
+  .checklist-item{display:flex;align-items:center;gap:8px;}
+  .checklist-item input[type=checkbox]{width:17px;height:17px;flex:none;accent-color:var(--volt);}
+  .checklist-item input[type=text]{flex:1;border:none;background:transparent;padding:4px 0;font-size:.9rem;}
+  .checklist-item input[type=text]:focus{outline:none;border-bottom:1.5px solid var(--volt);}
+  .checklist-item.done input[type=text]{text-decoration:line-through;color:var(--ink-45);}
+  .checklist-remove{border:none;background:transparent;color:var(--ink-35);cursor:pointer;width:22px;height:22px;flex:none;border-radius:6px;}
+  .checklist-remove:hover{background:rgba(225,59,59,.12);color:var(--danger);}
+  .checklist-add{display:flex;gap:8px;margin-top:4px;}
+  .checklist-add input{flex:1;}
+  .checklist-progress{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .checklist-progress-bar{flex:1;height:5px;border-radius:99px;background:var(--paper-dim);overflow:hidden;}
+  .checklist-progress-bar span{display:block;height:100%;background:var(--done);}
+  .checklist-progress b{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-45);white-space:nowrap;}
+
+  .group-toggle{display:flex;gap:4px;background:#fff;border:1.5px solid var(--border);border-radius:999px;padding:3px;}
+  .group-toggle button{border:none;background:transparent;padding:6px 13px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;color:var(--ink-60);}
+  .group-toggle button.active{background:var(--ink);color:var(--acid);}
+  .board-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+
+  .swimlane{margin-bottom:26px;}
+  .swimlane-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;}
+  .swimlane-head .client-avatar{width:30px;height:30px;font-size:11px;}
+  .swimlane-head h3{font-size:.98rem;flex:1;}
+  .swimlane-head .chevron{transition:transform .15s ease;color:var(--ink-45);}
+  .swimlane.collapsed .chevron{transform:rotate(-90deg);}
+  .swimlane.collapsed .board-columns{display:none;}
+  .col-count.overload{background:var(--danger);color:#fff;}
+  .client-count.overload{color:var(--danger);font-weight:700;}
+
+  .package-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+  .package-row{display:grid;grid-template-columns:1fr 110px 100px 130px 32px;gap:8px;align-items:center;}
+  @media (max-width:600px){.package-row{grid-template-columns:1fr 1fr;}}
+  .package-row input,.package-row select{padding:9px 10px;font-size:13px;}
+  .package-row-remove{border:none;background:var(--paper-dim);color:var(--danger);width:32px;height:32px;border-radius:8px;cursor:pointer;}
+
+  .template-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .template-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper-dim);border-radius:10px;padding:10px 12px;}
+  .template-item-info{font-size:.85rem;}
+  .template-item-info span{display:block;font-size:.76rem;color:var(--ink-45);}
+  .template-item-actions{display:flex;gap:6px;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="https://dgrdianaribeiro-rgb.github.io/dgrcreative/" class="brand">
+      <span class="brand-mark"><span>dgr</span></span>
+      <span>
+        <span class="brand-name">Dgr Creative</span>
+        <span class="brand-sub">Diana Ribeiro</span>
+      </span>
+    </a>
+    <a href="https://dgrdianaribeiro-rgb.github.io/dgrcreative/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H5M11 18l-6-6 6-6"></path></svg>
+      Voltar ao site
+    </a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-blob a"></div>
+  <div class="hero-blob b"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <p class="eyebrow"><span></span>Ferramenta interna · Demandas</p>
+      <h1>Central de demandas dos clientes</h1>
+      <p>Cadastre clientes, registre atividades com prazo, briefing e urgência, organize tudo em quadro estilo Trello e acompanhe no calendário. Toque no microfone para criar uma demanda falando, e avise a si mesma no WhatsApp com um clique.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="tabs">
+      <button class="tab-btn active" data-view="board">Quadro</button>
+      <button class="tab-btn" data-view="calendar">Calendário</button>
+      <button class="tab-btn" data-view="clients">Clientes</button>
+    </div>
+    <div class="toolbar-actions">
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        <input type="text" id="searchInput" placeholder="Buscar demanda ou cliente...">
+      </div>
+      <button class="btn btn-ghost btn-sm" id="settingsBtn" title="Configurar WhatsApp de alerta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2.06 2.06 0 1 1-2.91 2.91l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2.06 2.06 0 1 1-4.12 0v-.09A1.7 1.7 0 0 0 8.8 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2.06 2.06 0 1 1-2.91-2.91l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H2.7a2.06 2.06 0 1 1 0-4.12h.09A1.7 1.7 0 0 0 4.4 8.8a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2.06 2.06 0 1 1 2.91-2.91l.06.06a1.7 1.7 0 0 0 1.87.34H8.9A1.7 1.7 0 0 0 9.9 2.81V2.7a2.06 2.06 0 1 1 4.12 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2.06 2.06 0 1 1 2.91 2.91l-.06.06a1.7 1.7 0 0 0-.34 1.87v.1a1.7 1.7 0 0 0 1.55 1h.09a2.06 2.06 0 1 1 0 4.12h-.09a1.7 1.7 0 0 0-1.55 1Z"></path></svg>
+        WhatsApp
+      </button>
+      <button class="btn btn-ghost btn-sm" id="recurringBtn" title="Demandas recorrentes">🔁 Recorrências</button>
+      <button class="btn btn-ghost btn-sm" id="packageBtn" title="Criar várias demandas de uma vez">+ Pacote</button>
+      <button class="btn btn-ghost btn-sm" id="exportBtn">Exportar</button>
+      <button class="btn btn-ghost btn-sm" id="importBtn">Importar</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+      <button class="btn btn-dark" id="newDemandBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Nova demanda
+      </button>
+    </div>
+  </div>
+
+  <section id="viewBoard" class="view active">
+    <div class="alert-banner" id="alertBanner">
+      <div class="alert-banner-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+        <span id="alertBannerTitle">Demandas urgentes</span>
+        <button class="btn btn-ghost btn-sm" id="digestBtn" style="margin-left:auto">Avisar tudo no WhatsApp</button>
+      </div>
+      <div class="alert-list" id="alertList"></div>
+    </div>
+    <div class="board-toolbar">
+      <div class="urgency-filters" id="urgencyFilters" style="margin-bottom:0">
+        <button class="urg-chip active" data-urg="all">Todas</button>
+        <button class="urg-chip" data-urg="urgente">Urgente</button>
+        <button class="urg-chip" data-urg="alta">Alta</button>
+        <button class="urg-chip" data-urg="normal">Normal</button>
+        <button class="urg-chip" data-urg="baixa">Baixa</button>
+      </div>
+      <div class="group-toggle" id="groupToggle">
+        <button class="active" data-group="status">Por status</button>
+        <button data-group="client">Por cliente</button>
+      </div>
+    </div>
+    <div id="boardContainer"><div class="board-columns" id="boardColumns"></div></div>
+  </section>
+
+  <section id="viewCalendar" class="view">
+    <div class="cal-head">
+      <div class="cal-nav">
+        <button class="btn btn-ghost btn-sm" id="calPrev">‹</button>
+        <span class="cal-label" id="calLabel"></span>
+        <button class="btn btn-ghost btn-sm" id="calNext">›</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="calToday">Hoje</button>
+    </div>
+    <div class="cal-grid" id="calDow"></div>
+    <div class="cal-grid" id="calGrid" style="margin-top:6px"></div>
+  </section>
+
+  <section id="viewClients" class="view">
+    <div class="clients-grid" id="clientsGrid"></div>
+  </section>
+</main>
+
+<button class="mic-fab" id="micFab" title="Criar demanda por voz">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 19v3"></path></svg>
+</button>
+
+<div class="overlay" id="voiceOverlay" hidden>
+  <div class="voice-panel">
+    <div class="voice-orb"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 19v3"></path></svg></div>
+    <h2>Estou ouvindo...</h2>
+    <p class="voice-hint">Fale o cliente e o que precisa ser feito. Ex.: "Blue, preciso de 3 posts para sexta-feira".</p>
+    <div class="voice-transcript" id="voiceTranscript">—</div>
+    <button class="btn btn-ghost" id="voiceCancelBtn">Cancelar</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="demandModal" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="demandModalTitle">Nova demanda</h2>
+      <button class="modal-close" id="demandCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div id="voiceOriginNote" class="voice-note" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 19v3"></path></svg>
+      <span>Criada por voz. Confira o cliente e o prazo identificados e ajuste se precisar.</span>
+    </div>
+    <div class="field">
+      <label for="demandClient">Cliente</label>
+      <select id="demandClient"></select>
+    </div>
+    <div class="field">
+      <label for="demandTitle">Nome da atividade</label>
+      <input type="text" id="demandTitle" placeholder="Ex.: Carrossel sobre lançamento da coleção">
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="demandType">Tipo</label>
+        <select id="demandType">
+          <option value="post">Post estático</option>
+          <option value="carrossel">Carrossel</option>
+          <option value="video">Vídeo / Reels</option>
+          <option value="stories">Stories</option>
+          <option value="reuniao">Reunião</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="demandPriority">Prioridade</label>
+        <select id="demandPriority">
+          <option value="baixa">Baixa</option>
+          <option value="normal" selected>Normal</option>
+          <option value="alta">Alta</option>
+          <option value="urgente">Urgente</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="demandDue">Prazo</label>
+        <input type="date" id="demandDue">
+      </div>
+      <div class="field">
+        <label for="demandStatus">Status</label>
+        <select id="demandStatus">
+          <option value="todo">A Fazer</option>
+          <option value="doing">Em andamento</option>
+          <option value="review">Em revisão</option>
+          <option value="done">Concluído</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="demandBriefing">Briefing / o que é necessário</label>
+      <textarea id="demandBriefing" placeholder="Referências, tom de voz, materiais que o cliente vai enviar, links..."></textarea>
+    </div>
+    <div class="field">
+      <label for="demandLink">Link de referência (Drive, Canva...)</label>
+      <input type="text" id="demandLink" placeholder="https://...">
+    </div>
+    <div class="field">
+      <label>Etiquetas</label>
+      <div class="tag-input-row">
+        <input type="text" id="tagInput" placeholder="Ex.: aguardando material do cliente">
+        <button type="button" class="btn btn-ghost btn-sm" id="tagAddBtn">Adicionar</button>
+      </div>
+      <div class="tag-list-edit" id="tagListEdit"></div>
+    </div>
+    <div class="field">
+      <label>Checklist</label>
+      <div class="checklist-progress" id="checklistProgress" hidden>
+        <div class="checklist-progress-bar"><span id="checklistProgressBar" style="width:0%"></span></div>
+        <b id="checklistProgressText">0/0</b>
+      </div>
+      <div class="checklist" id="checklistItems"></div>
+      <div class="checklist-add">
+        <input type="text" id="checklistInput" placeholder="Ex.: gravar, editar, aprovar com cliente...">
+        <button type="button" class="btn btn-ghost btn-sm" id="checklistAddBtn">Adicionar</button>
+      </div>
+    </div>
+    <div class="check-row">
+      <input type="checkbox" id="demandWhatsAlert">
+      <label for="demandWhatsAlert"><b>Avisar no WhatsApp</b>Ao salvar, abre uma conversa no seu WhatsApp com um lembrete pronto desta demanda.</label>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="demandDeleteBtn" style="color:var(--danger)">Excluir</button>
+      <div style="display:flex;gap:8px">
+        <button class="icon-btn wa-btn" id="demandWaNowBtn" title="Enviar lembrete agora no WhatsApp" style="border:1.5px solid var(--border);width:auto;padding:0 12px;border-radius:999px">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+        </button>
+        <button class="btn btn-dark" id="demandSaveBtn">Salvar demanda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="clientModal" hidden>
+  <div class="modal-card" style="max-width:440px">
+    <div class="modal-head">
+      <h2 id="clientModalTitle">Novo cliente</h2>
+      <button class="modal-close" id="clientCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="field">
+      <label for="clientName">Nome / marca</label>
+      <input type="text" id="clientName" placeholder="Ex.: Studio Kuartim">
+    </div>
+    <div class="field">
+      <label for="clientHandle">Instagram / handle</label>
+      <input type="text" id="clientHandle" placeholder="@marca">
+    </div>
+    <div class="field">
+      <label for="clientContact">Contato (WhatsApp / e-mail)</label>
+      <input type="text" id="clientContact" placeholder="(85) 9 9999-9999">
+    </div>
+    <div class="field">
+      <label for="clientNotes">Notas</label>
+      <textarea id="clientNotes" placeholder="Guia de marca, preferências, observações..."></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="clientDeleteBtn" style="color:var(--danger)">Excluir</button>
+      <button class="btn btn-dark" id="clientSaveBtn">Salvar cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="dayModal" hidden>
+  <div class="modal-card" style="max-width:420px">
+    <div class="modal-head">
+      <h2 id="dayModalTitle">Dia</h2>
+      <button class="modal-close" id="dayCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="day-list" id="dayList"></div>
+    <button class="btn btn-dark" id="dayNewBtn" style="width:100%">+ Nova demanda neste dia</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal" hidden>
+  <div class="modal-card" style="max-width:420px">
+    <div class="modal-head">
+      <h2>Alerta no WhatsApp</h2>
+      <button class="modal-close" id="settingsCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="field">
+      <label for="settingsWhatsapp">Seu número de WhatsApp</label>
+      <input type="text" id="settingsWhatsapp" placeholder="Ex.: 5585999999999 (DDI + DDD + número)">
+      <p class="field-hint">Ao clicar em "avisar", abrimos uma conversa com esse número já com a mensagem do lembrete pronta — funciona melhor com o seu próprio número, para você se avisar.</p>
+    </div>
+    <div class="field-hint" style="margin-bottom:14px">Isso não envia mensagens automaticamente enquanto a ferramenta está fechada: cada aviso precisa de um clique seu (aqui ou no card) para abrir o WhatsApp com o texto pronto.</div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="settingsColLimit">Limite por coluna</label>
+        <input type="number" id="settingsColLimit" min="1">
+      </div>
+      <div class="field">
+        <label for="settingsClientLimit">Limite por cliente</label>
+        <input type="number" id="settingsClientLimit" min="1">
+      </div>
+    </div>
+    <p class="field-hint" style="margin-top:-8px;margin-bottom:14px">Acima desse número de demandas em aberto, a coluna ou o cliente ficam destacados em vermelho como aviso de sobrecarga.</p>
+    <div class="modal-foot" style="justify-content:flex-end">
+      <button class="btn btn-dark" id="settingsSaveBtn">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="recurringModal" hidden>
+  <div class="modal-card" style="max-width:520px">
+    <div class="modal-head">
+      <h2>Demandas recorrentes</h2>
+      <button class="modal-close" id="recurringCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <p class="field-hint" style="margin-bottom:14px">Um modelo recorrente cria automaticamente uma nova demanda a cada semana ou mês, sempre que você abrir a ferramenta no período certo.</p>
+    <div class="template-list" id="recurringList"></div>
+    <div class="field">
+      <label for="recClient">Cliente</label>
+      <select id="recClient"></select>
+    </div>
+    <div class="field">
+      <label for="recTitle">Nome da atividade</label>
+      <input type="text" id="recTitle" placeholder="Ex.: Pacote de posts do mês">
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="recType">Tipo</label>
+        <select id="recType">
+          <option value="post">Post estático</option>
+          <option value="carrossel">Carrossel</option>
+          <option value="video">Vídeo / Reels</option>
+          <option value="stories">Stories</option>
+          <option value="reuniao">Reunião</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="recPriority">Prioridade</label>
+        <select id="recPriority">
+          <option value="baixa">Baixa</option>
+          <option value="normal" selected>Normal</option>
+          <option value="alta">Alta</option>
+          <option value="urgente">Urgente</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="recFreq">Frequência</label>
+        <select id="recFreq">
+          <option value="weekly">Semanal</option>
+          <option value="monthly" selected>Mensal</option>
+        </select>
+      </div>
+      <div class="field" id="recWeekdayField" hidden>
+        <label for="recWeekday">Dia da semana</label>
+        <select id="recWeekday">
+          <option value="0">Domingo</option>
+          <option value="1">Segunda</option>
+          <option value="2">Terça</option>
+          <option value="3">Quarta</option>
+          <option value="4">Quinta</option>
+          <option value="5">Sexta</option>
+          <option value="6">Sábado</option>
+        </select>
+      </div>
+      <div class="field" id="recDayField">
+        <label for="recDay">Dia do mês</label>
+        <input type="number" id="recDay" min="1" max="28" value="1">
+      </div>
+    </div>
+    <div class="modal-foot" style="justify-content:flex-end">
+      <button class="btn btn-dark" id="recAddBtn">+ Criar modelo recorrente</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="packageModal" hidden>
+  <div class="modal-card" style="max-width:640px">
+    <div class="modal-head">
+      <h2>Criar demandas em lote</h2>
+      <button class="modal-close" id="packageCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="field">
+      <label for="pkgClient">Cliente</label>
+      <select id="pkgClient"></select>
+    </div>
+    <div class="field" id="pkgTemplateField">
+      <label for="pkgTemplateSelect">Usar modelo salvo (opcional)</label>
+      <select id="pkgTemplateSelect">
+        <option value="">— Começar em branco —</option>
+      </select>
+    </div>
+    <div class="package-rows" id="packageRows"></div>
+    <button type="button" class="btn btn-ghost btn-sm" id="pkgAddRowBtn" style="margin-bottom:16px">+ Adicionar item</button>
+    <div class="check-row">
+      <input type="checkbox" id="pkgSaveTemplate">
+      <label for="pkgSaveTemplate"><b>Salvar como modelo reutilizável</b>Guarda esta lista de itens (sem prazos) para aplicar em qualquer cliente depois.</label>
+    </div>
+    <div class="field" id="pkgTemplateNameField" hidden>
+      <label for="pkgTemplateName">Nome do modelo</label>
+      <input type="text" id="pkgTemplateName" placeholder="Ex.: Pacote mensal completo">
+    </div>
+    <div class="modal-foot" style="justify-content:flex-end">
+      <button class="btn btn-dark" id="pkgCreateBtn">Criar demandas</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+  var LS_KEY = 'dgr_demandas_v1';
+  var STATUS = [
+    {id:'todo', label:'A Fazer', cls:'col-todo'},
+    {id:'doing', label:'Em andamento', cls:'col-doing'},
+    {id:'review', label:'Em revisão', cls:'col-review'},
+    {id:'done', label:'Concluído', cls:'col-done'}
+  ];
+  var TYPE_LABEL = {post:'Post', carrossel:'Carrossel', video:'Vídeo', stories:'Stories', reuniao:'Reunião', outro:'Outro'};
+  var DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  var WEEKDAY_LABELS = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  var CLIENT_COLORS = ['#2100ff','#160092','#e13b3b','#ff8a00','#1f9d55','#7a2ee6','#0a8f9e'];
+
+  function typeOptionsHtml(sel){
+    return Object.keys(TYPE_LABEL).map(function(k){ return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + TYPE_LABEL[k] + '</option>'; }).join('');
+  }
+  function priorityOptionsHtml(sel){
+    return ['baixa','normal','alta','urgente'].map(function(k){ return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + k.charAt(0).toUpperCase() + k.slice(1) + '</option>'; }).join('');
+  }
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function stripAccents(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,''); }
+  function isoDate(d){ var y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
+  function addDays(d,n){ var r = new Date(d); r.setDate(r.getDate()+n); return r; }
+  function todayMidnight(){ var d = new Date(); d.setHours(0,0,0,0); return d; }
+  function formatDatePt(iso){
+    if(!iso) return '';
+    var p = iso.split('-');
+    return p[2] + '/' + p[1];
+  }
+  function colorFor(id){
+    var h = 0;
+    for(var i=0;i<id.length;i++){ h = (h*31 + id.charCodeAt(i)) >>> 0; }
+    return CLIENT_COLORS[h % CLIENT_COLORS.length];
+  }
+  function initials(name){
+    var parts = String(name).trim().split(/\s+/);
+    return ((parts[0]||'')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+
+  function seedClients(){
+    return [
+      {id:uid(), name:'Luis Fernando Velasco', handle:'@psi.luisfernandovelasco', contact:'', notes:'Consultório de psicologia — carrosséis com referências de cinema.'},
+      {id:uid(), name:'Blue', handle:'@blueinfinitystore', contact:'', notes:'Moda praia — biquínis, bonés, cangas e acessórios.'},
+      {id:uid(), name:'Lapaivinha', handle:'@lapaivinha', contact:'', notes:'Bem-estar digital — guia de marca próprio.'},
+      {id:uid(), name:'CT João Alfredo Paiva', handle:'@ct.joaoalfredopaiva', contact:'', notes:'Acompanhamento estratégico de social media.'},
+      {id:uid(), name:'Studio Kuartim', handle:'@studiokuartim', contact:'', notes:'Acompanhamento estratégico de social media.'}
+    ];
+  }
+
+  var DEFAULT_WHATSAPP = '5585991281467';
+  var DEFAULT_SETTINGS = { whatsapp: DEFAULT_WHATSAPP, colLimit: 6, clientLimit: 5 };
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(LS_KEY);
+      if(raw){
+        var data = JSON.parse(raw);
+        if(data && Array.isArray(data.clients) && Array.isArray(data.demands)){
+          data.settings = Object.assign({}, DEFAULT_SETTINGS, data.settings || {});
+          if(!Array.isArray(data.recurringTemplates)) data.recurringTemplates = [];
+          if(!Array.isArray(data.packageTemplates)) data.packageTemplates = [];
+          return data;
+        }
+      }
+    }catch(e){}
+    return { clients: seedClients(), demands: [], settings: Object.assign({}, DEFAULT_SETTINGS), recurringTemplates: [], packageTemplates: [] };
+  }
+  function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+  var PRIORITY_RANK = { urgente: 0, alta: 1, normal: 2, baixa: 3 };
+  var state = loadState();
+  var currentView = 'board';
+  var searchTerm = '';
+  var urgencyFilter = 'all';
+  var boardGroupBy = 'status';
+  var calMonth = new Date(); calMonth.setDate(1);
+  var editingDemandId = null;
+  var editingClientId = null;
+  var dayModalIso = null;
+  var modalChecklist = [];
+  var modalTags = [];
+  var pkgRows = [];
+
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+
+  function matchesSearch(text){
+    if(!searchTerm) return true;
+    return stripAccents(String(text||'').toLowerCase()).indexOf(searchTerm) !== -1;
+  }
+
+  function clientById(id){ return state.clients.find(function(c){ return c.id === id; }); }
+
+  function dueUrgency(iso){
+    if(!iso) return 'none';
+    var today = todayMidnight();
+    var d = new Date(iso + 'T00:00:00');
+    var diff = Math.round((d - today) / 86400000);
+    if(diff < 0) return 'overdue';
+    if(diff <= 1) return 'soon';
+    return 'ok';
+  }
+
+  function digitsOnly(s){ return String(s || '').replace(/\D/g, ''); }
+
+  function reminderMessage(d){
+    var client = clientById(d.clientId);
+    var lines = ['*Lembrete Dgr Creative*', d.title];
+    if(client) lines.push('Cliente: ' + client.name);
+    if(d.dueDate) lines.push('Prazo: ' + formatDatePt(d.dueDate));
+    lines.push('Prioridade: ' + d.priority);
+    if(d.briefing) lines.push('Briefing: ' + d.briefing);
+    if(d.link) lines.push('Link: ' + d.link);
+    return lines.join('\n');
+  }
+
+  function sendWhatsAppReminder(d){
+    var phone = digitsOnly(state.settings.whatsapp);
+    if(!phone){
+      showToast('Configure seu número de WhatsApp primeiro.');
+      openSettingsModal();
+      return;
+    }
+    var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(reminderMessage(d));
+    window.open(url, '_blank', 'noopener');
+  }
+
+  function openSettingsModal(){
+    document.getElementById('settingsWhatsapp').value = state.settings.whatsapp || '';
+    document.getElementById('settingsColLimit').value = state.settings.colLimit || 6;
+    document.getElementById('settingsClientLimit').value = state.settings.clientLimit || 5;
+    document.getElementById('settingsModal').hidden = false;
+  }
+
+  function saveSettingsFromModal(){
+    state.settings.whatsapp = digitsOnly(document.getElementById('settingsWhatsapp').value);
+    state.settings.colLimit = Math.max(1, +document.getElementById('settingsColLimit').value || 6);
+    state.settings.clientLimit = Math.max(1, +document.getElementById('settingsClientLimit').value || 5);
+    saveState();
+    closeModal('settingsModal');
+    renderAll();
+    showToast('Configurações salvas.');
+  }
+
+  function sendDailyDigest(){
+    var phone = digitsOnly(state.settings.whatsapp);
+    if(!phone){
+      showToast('Configure seu número de WhatsApp primeiro.');
+      openSettingsModal();
+      return;
+    }
+    var items = state.demands.filter(isUrgentItem).sort(function(a,b){
+      return (PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]) || (a.dueDate || '9999').localeCompare(b.dueDate || '9999');
+    });
+    if(items.length === 0){ showToast('Nenhuma demanda urgente agora.'); return; }
+    var lines = ['*Resumo Dgr Creative — ' + formatDatePt(isoDate(new Date())) + '*', ''];
+    items.forEach(function(d){
+      var client = clientById(d.clientId);
+      var u = dueUrgency(d.dueDate);
+      var dueText = d.dueDate ? (u === 'overdue' ? 'atrasada, prazo era ' : 'prazo ') + formatDatePt(d.dueDate) : 'sem prazo';
+      lines.push('• ' + d.title + (client ? ' (' + client.name + ')' : '') + ' — ' + dueText);
+    });
+    var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\n'));
+    window.open(url, '_blank', 'noopener');
+  }
+
+  function computeTemplateDue(tpl, ref){
+    if(tpl.freq === 'weekly'){
+      var diff = (+tpl.weekday) - ref.getDay();
+      return addDays(ref, diff);
+    }
+    var dom = Math.min(+tpl.dayOfMonth, new Date(ref.getFullYear(), ref.getMonth() + 1, 0).getDate());
+    return new Date(ref.getFullYear(), ref.getMonth(), dom);
+  }
+
+  function computePeriodKey(tpl, ref){
+    if(tpl.freq === 'weekly'){
+      var start = addDays(ref, -ref.getDay());
+      return 'W' + isoDate(start);
+    }
+    return 'M' + ref.getFullYear() + '-' + String(ref.getMonth() + 1).padStart(2, '0');
+  }
+
+  function ensureRecurringInstances(){
+    var today = todayMidnight();
+    var changed = false;
+    (state.recurringTemplates || []).forEach(function(tpl){
+      if(!tpl.active) return;
+      var periodKey = computePeriodKey(tpl, today);
+      var exists = state.demands.some(function(d){ return d.templateId === tpl.id && d.periodKey === periodKey; });
+      if(!exists){
+        var due = computeTemplateDue(tpl, today);
+        state.demands.unshift({
+          id: uid(), clientId: tpl.clientId, title: tpl.title, type: tpl.type, priority: tpl.priority,
+          briefing: '', link: '', tags: [], checklist: [], status: 'todo', dueDate: isoDate(due),
+          createdAt: new Date().toISOString(), templateId: tpl.id, periodKey: periodKey
+        });
+        changed = true;
+      }
+    });
+    if(changed) saveState();
+  }
+
+  function renderRecurringList(){
+    var list = document.getElementById('recurringList');
+    var tpls = state.recurringTemplates || [];
+    if(tpls.length === 0){ list.innerHTML = '<p class="empty-hint">Nenhum modelo recorrente ainda.</p>'; return; }
+    list.innerHTML = tpls.map(function(t){
+      var client = clientById(t.clientId);
+      var freqText = t.freq === 'weekly' ? ('toda ' + WEEKDAY_LABELS[+t.weekday]) : ('todo dia ' + t.dayOfMonth + ' do mês');
+      return '<div class="template-item"><div class="template-item-info"><b>' + escapeHtml(t.title) + '</b><span>' + escapeHtml((client ? client.name + ' · ' : '') + freqText) + '</span></div>' +
+        '<div class="template-item-actions"><button class="btn btn-ghost btn-sm" data-toggle-tpl="' + t.id + '">' + (t.active ? 'Pausar' : 'Ativar') + '</button>' +
+        '<button class="icon-btn" data-del-tpl="' + t.id + '" style="color:var(--danger)">✕</button></div></div>';
+    }).join('');
+    list.querySelectorAll('[data-toggle-tpl]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var t = state.recurringTemplates.find(function(x){ return x.id === btn.dataset.toggleTpl; });
+        t.active = !t.active;
+        saveState();
+        ensureRecurringInstances();
+        renderRecurringList();
+        renderAll();
+      });
+    });
+    list.querySelectorAll('[data-del-tpl]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(!confirm('Excluir este modelo recorrente? As demandas já criadas continuam existindo.')) return;
+        state.recurringTemplates = state.recurringTemplates.filter(function(x){ return x.id !== btn.dataset.delTpl; });
+        saveState();
+        renderRecurringList();
+      });
+    });
+  }
+
+  function openRecurringModal(){
+    fillClientSelect(document.getElementById('recClient'), true);
+    document.getElementById('recTitle').value = '';
+    renderRecurringList();
+    document.getElementById('recurringModal').hidden = false;
+  }
+
+  function addRecurringTemplate(){
+    var title = document.getElementById('recTitle').value.trim();
+    if(!title){ showToast('Dê um nome para o modelo.'); return; }
+    var tpl = {
+      id: uid(),
+      clientId: document.getElementById('recClient').value,
+      title: title,
+      type: document.getElementById('recType').value,
+      priority: document.getElementById('recPriority').value,
+      freq: document.getElementById('recFreq').value,
+      weekday: document.getElementById('recWeekday').value,
+      dayOfMonth: document.getElementById('recDay').value,
+      active: true,
+      createdAt: new Date().toISOString()
+    };
+    state.recurringTemplates.push(tpl);
+    saveState();
+    document.getElementById('recTitle').value = '';
+    ensureRecurringInstances();
+    renderRecurringList();
+    renderAll();
+    showToast('Modelo recorrente criado — a primeira demanda já foi gerada.');
+  }
+
+  function renderPackageRows(){
+    var container = document.getElementById('packageRows');
+    container.innerHTML = pkgRows.map(function(r, idx){
+      return '<div class="package-row">' +
+        '<input type="text" data-field="title" data-idx="' + idx + '" placeholder="Nome da atividade" value="' + escapeHtml(r.title) + '">' +
+        '<select data-field="type" data-idx="' + idx + '">' + typeOptionsHtml(r.type) + '</select>' +
+        '<select data-field="priority" data-idx="' + idx + '">' + priorityOptionsHtml(r.priority) + '</select>' +
+        '<input type="date" data-field="dueDate" data-idx="' + idx + '" value="' + (r.dueDate || '') + '">' +
+        '<button type="button" class="package-row-remove" data-idx="' + idx + '">✕</button>' +
+      '</div>';
+    }).join('');
+    container.querySelectorAll('input,select').forEach(function(el){
+      var handler = function(){ pkgRows[+this.dataset.idx][this.dataset.field] = this.value; };
+      el.addEventListener('input', handler);
+      el.addEventListener('change', handler);
+    });
+    container.querySelectorAll('.package-row-remove').forEach(function(btn){
+      btn.addEventListener('click', function(){ pkgRows.splice(+this.dataset.idx, 1); renderPackageRows(); });
+    });
+  }
+
+  function openPackageModal(){
+    fillClientSelect(document.getElementById('pkgClient'), false);
+    var sel = document.getElementById('pkgTemplateSelect');
+    sel.innerHTML = '<option value="">— Começar em branco —</option>' + (state.packageTemplates || []).map(function(t){
+      return '<option value="' + t.id + '">' + escapeHtml(t.name) + '</option>';
+    }).join('');
+    pkgRows = [{ title: '', type: 'post', priority: 'normal', dueDate: '' }];
+    renderPackageRows();
+    document.getElementById('pkgSaveTemplate').checked = false;
+    document.getElementById('pkgTemplateNameField').hidden = true;
+    document.getElementById('pkgTemplateName').value = '';
+    document.getElementById('packageModal').hidden = false;
+  }
+
+  function createPackageDemands(){
+    var clientId = document.getElementById('pkgClient').value;
+    var validRows = pkgRows.filter(function(r){ return r.title && r.title.trim(); });
+    if(validRows.length === 0){ showToast('Adicione ao menos um item com nome.'); return; }
+    validRows.forEach(function(r){
+      state.demands.unshift({
+        id: uid(), clientId: clientId, title: r.title.trim(), type: r.type || 'post', priority: r.priority || 'normal',
+        dueDate: r.dueDate || '', status: 'todo', briefing: '', link: '', tags: [], checklist: [],
+        createdAt: new Date().toISOString()
+      });
+    });
+    if(document.getElementById('pkgSaveTemplate').checked){
+      var name = document.getElementById('pkgTemplateName').value.trim();
+      if(name){
+        state.packageTemplates.push({
+          id: uid(), name: name,
+          items: validRows.map(function(r){ return { title: r.title.trim(), type: r.type, priority: r.priority }; })
+        });
+      }
+    }
+    saveState();
+    closeModal('packageModal');
+    renderAll();
+    var client = clientById(clientId);
+    showToast(validRows.length + ' demanda(s) criada(s)' + (client ? ' para ' + client.name : '') + '.');
+  }
+
+  function isUrgentItem(d){
+    if(d.status === 'done') return false;
+    var u = dueUrgency(d.dueDate);
+    return d.priority === 'urgente' || u === 'overdue' || u === 'soon';
+  }
+
+  function renderAlertBanner(){
+    var banner = document.getElementById('alertBanner');
+    var items = state.demands.filter(isUrgentItem).sort(function(a,b){
+      return (PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]) || (a.dueDate || '9999').localeCompare(b.dueDate || '9999');
+    });
+    if(items.length === 0){ banner.classList.remove('show'); return; }
+    banner.classList.add('show');
+    document.getElementById('alertBannerTitle').textContent = items.length + ' demanda(s) urgente(s) ou perto do prazo';
+    var list = document.getElementById('alertList');
+    list.innerHTML = items.map(function(d){
+      var client = clientById(d.clientId);
+      var u = dueUrgency(d.dueDate);
+      var dueText = d.dueDate ? (u === 'overdue' ? 'atrasada — ' : 'prazo ') + formatDatePt(d.dueDate) : 'sem prazo';
+      return '<div class="alert-item">' +
+        '<span class="alert-item-info" data-open="' + d.id + '"><b>' + escapeHtml(d.title) + '</b><span>' + escapeHtml((client ? client.name + ' · ' : '') + dueText) + '</span></span>' +
+        '<button class="icon-btn wa-btn" data-wa="' + d.id + '" title="Avisar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></button>' +
+      '</div>';
+    }).join('');
+    list.querySelectorAll('[data-open]').forEach(function(el){
+      el.addEventListener('click', function(){ openDemandModal(el.dataset.open); });
+    });
+    list.querySelectorAll('[data-wa]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var d = state.demands.find(function(x){ return x.id === btn.dataset.wa; });
+        if(d) sendWhatsAppReminder(d);
+      });
+    });
+  }
+
+  function renderAll(){
+    renderAlertBanner();
+    renderBoard();
+    renderCalendar();
+    renderClients();
+    renderClientSelect();
+  }
+
+  function switchView(view){
+    currentView = view;
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.view === view); });
+    document.getElementById('viewBoard').classList.toggle('active', view === 'board');
+    document.getElementById('viewCalendar').classList.toggle('active', view === 'calendar');
+    document.getElementById('viewClients').classList.toggle('active', view === 'clients');
+  }
+
+  function priorityIndicator(priority){
+    if(priority === 'urgente') return '<span class="priority-pill p-urgente">Urgente</span>';
+    if(priority === 'alta') return '<span class="priority-pill p-alta">Alta</span>';
+    return '<span class="priority-dot p-' + priority + '" title="Prioridade ' + priority + '"></span>';
+  }
+
+  function tagChipHtml(tag){
+    return '<span class="tag-chip"><span class="tag-dot" style="background:' + colorFor(tag) + '"></span>' + escapeHtml(tag) + '</span>';
+  }
+
+  function cardHtml(d){
+    var client = clientById(d.clientId);
+    var urgency = dueUrgency(d.dueDate);
+    var dueClass = urgency === 'overdue' ? ' due-overdue' : (urgency === 'soon' ? ' due-soon' : '');
+    var dueText = d.dueDate ? formatDatePt(d.dueDate) : 'sem prazo';
+    var tags = d.tags || [];
+    var checklist = d.checklist || [];
+    var tagsHtml = tags.length ? '<div class="card-tags">' + tags.slice(0, 3).map(tagChipHtml).join('') + (tags.length > 3 ? '<span class="tag-chip">+' + (tags.length - 3) + '</span>' : '') + '</div>' : '';
+    var checklistHtml = '';
+    if(checklist.length){
+      var doneCount = checklist.filter(function(i){ return i.done; }).length;
+      checklistHtml = '<div class="checklist-progress"><div class="checklist-progress-bar"><span style="width:' + Math.round(doneCount / checklist.length * 100) + '%"></span></div><b>' + doneCount + '/' + checklist.length + '</b></div>';
+    }
+    return '' +
+      '<div class="card prio-' + d.priority + '" draggable="true" data-id="' + d.id + '">' +
+        '<div class="card-top">' +
+          '<span class="client-chip">' +
+            (client ? '<span class="client-dot" style="background:' + colorFor(client.id) + '">' + escapeHtml(initials(client.name)) + '</span>' + escapeHtml(client.name) : '<span class="client-dot" style="background:var(--ink-35)">–</span>Sem cliente') +
+          '</span>' +
+          priorityIndicator(d.priority) +
+        '</div>' +
+        tagsHtml +
+        '<p class="card-title">' + (d.templateId ? '🔁 ' : '') + escapeHtml(d.title) + '</p>' +
+        checklistHtml +
+        '<div class="card-meta">' +
+          '<span class="due-tag' + dueClass + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>' + escapeHtml(dueText) + '</span>' +
+          '<span class="card-actions">' +
+            '<button class="icon-btn wa-btn" data-wa="' + d.id + '" title="Avisar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></button>' +
+            '<button class="icon-btn" data-edit="' + d.id + '" title="Editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>' +
+          '</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function filteredPool(){
+    return state.demands.filter(function(d){
+      return (urgencyFilter === 'all' || d.priority === urgencyFilter) &&
+        (matchesSearch(d.title) || matchesSearch(d.briefing) || matchesSearch((clientById(d.clientId)||{}).name) || (d.tags||[]).some(matchesSearch));
+    });
+  }
+
+  function wireColumnBody(body){
+    body.addEventListener('dragover', function(e){ e.preventDefault(); body.classList.add('drag-over'); });
+    body.addEventListener('dragleave', function(){ body.classList.remove('drag-over'); });
+    body.addEventListener('drop', function(e){
+      e.preventDefault();
+      body.classList.remove('drag-over');
+      var id = e.dataTransfer.getData('text/plain');
+      moveDemand(id, body.dataset.status);
+    });
+  }
+
+  function wireCards(container){
+    container.querySelectorAll('.card').forEach(function(card){
+      card.addEventListener('dragstart', function(e){
+        e.dataTransfer.setData('text/plain', card.dataset.id);
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', function(){ card.classList.remove('dragging'); });
+      card.addEventListener('click', function(e){
+        if(e.target.closest('[data-wa]')){
+          e.stopPropagation();
+          var d = state.demands.find(function(x){ return x.id === card.dataset.id; });
+          if(d) sendWhatsAppReminder(d);
+          return;
+        }
+        openDemandModal(card.dataset.id);
+      });
+    });
+  }
+
+  function buildColumnSet(pool){
+    var wrap = document.createElement('div');
+    wrap.className = 'board-columns';
+    STATUS.forEach(function(col){
+      var items = pool.filter(function(d){ return d.status === col.id; }).sort(function(a,b){
+        var rank = PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+        if(rank !== 0) return rank;
+        if(!a.dueDate) return 1;
+        if(!b.dueDate) return -1;
+        return a.dueDate.localeCompare(b.dueDate);
+      });
+      var overloaded = items.length > (state.settings.colLimit || 6);
+      var colEl = document.createElement('div');
+      colEl.className = 'board-col';
+      colEl.innerHTML = '<div class="col-head ' + col.cls + '"><span><span class="dot"></span>' + col.label + '</span><span class="col-count' + (overloaded ? ' overload' : '') + '">' + items.length + '</span></div><div class="col-body" data-status="' + col.id + '"></div>';
+      wrap.appendChild(colEl);
+      var body = colEl.querySelector('.col-body');
+      body.innerHTML = items.length === 0 ? '<p class="empty-hint">Sem demandas aqui.</p>' : items.map(cardHtml).join('');
+      wireColumnBody(body);
+    });
+    wireCards(wrap);
+    return wrap;
+  }
+
+  function groupByClient(pool){
+    var map = {}, order = [];
+    pool.forEach(function(d){
+      var key = d.clientId || '__none__';
+      if(!map[key]){ map[key] = { client: clientById(d.clientId) || null, items: [] }; order.push(key); }
+      map[key].items.push(d);
+    });
+    order.sort(function(a,b){
+      if(a === '__none__') return 1;
+      if(b === '__none__') return -1;
+      return map[a].client.name.localeCompare(map[b].client.name);
+    });
+    return order.map(function(k){ return map[k]; });
+  }
+
+  function renderBoard(){
+    var pool = filteredPool();
+    var container = document.getElementById('boardContainer');
+    container.innerHTML = '';
+    if(boardGroupBy === 'status'){
+      container.appendChild(buildColumnSet(pool));
+      return;
+    }
+    var groups = groupByClient(pool);
+    if(groups.length === 0){ container.innerHTML = '<p class="empty-hint">Nenhuma demanda encontrada.</p>'; return; }
+    groups.forEach(function(g){
+      var openCount = g.items.filter(function(d){ return d.status !== 'done'; }).length;
+      var overloaded = openCount > (state.settings.clientLimit || 5);
+      var section = document.createElement('div');
+      section.className = 'swimlane';
+      section.innerHTML = '<div class="swimlane-head">' +
+        (g.client ? '<span class="client-avatar" style="background:' + colorFor(g.client.id) + '">' + escapeHtml(initials(g.client.name)) + '</span>' : '<span class="client-avatar" style="background:var(--ink-35)">–</span>') +
+        '<h3>' + escapeHtml(g.client ? g.client.name : 'Sem cliente') + '</h3>' +
+        '<span class="col-count' + (overloaded ? ' overload' : '') + '">' + openCount + ' em aberto</span>' +
+        '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M6 9l6 6 6-6"></path></svg>' +
+      '</div>';
+      section.appendChild(buildColumnSet(g.items));
+      section.querySelector('.swimlane-head').addEventListener('click', function(){ section.classList.toggle('collapsed'); });
+      container.appendChild(section);
+    });
+  }
+
+  function moveDemand(id, status){
+    var d = state.demands.find(function(x){ return x.id === id; });
+    if(!d || d.status === status) return;
+    d.status = status;
+    saveState();
+    renderBoard();
+    renderCalendar();
+    renderAlertBanner();
+    renderClients();
+  }
+
+  function renderCalendar(){
+    var dowEl = document.getElementById('calDow');
+    dowEl.innerHTML = DOW.map(function(d){ return '<div class="cal-dow">' + d + '</div>'; }).join('');
+    document.getElementById('calLabel').textContent = calMonth.toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+
+    var year = calMonth.getFullYear(), month = calMonth.getMonth();
+    var firstDay = new Date(year, month, 1);
+    var startOffset = firstDay.getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var prevDays = new Date(year, month, 0).getDate();
+    var totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+    var todayIso = isoDate(new Date());
+
+    var grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    for(var i = 0; i < totalCells; i++){
+      var dayNum = i - startOffset + 1;
+      var cellDate, otherMonth = false;
+      if(dayNum < 1){ cellDate = new Date(year, month - 1, prevDays + dayNum); otherMonth = true; }
+      else if(dayNum > daysInMonth){ cellDate = new Date(year, month + 1, dayNum - daysInMonth); otherMonth = true; }
+      else { cellDate = new Date(year, month, dayNum); }
+      var iso = isoDate(cellDate);
+      var items = state.demands.filter(function(d){ return d.dueDate === iso; });
+      var cell = document.createElement('div');
+      cell.className = 'cal-cell' + (otherMonth ? ' other' : '') + (iso === todayIso ? ' today' : '') + (items.length ? ' has-items' : '');
+      cell.dataset.iso = iso;
+      cell.innerHTML = '<span class="cal-num">' + cellDate.getDate() + '</span><div class="cal-items">' +
+        items.slice(0, 3).map(function(d){
+          var client = clientById(d.clientId);
+          var label = (client ? client.name.split(' ')[0] + ': ' : '') + d.title;
+          return '<span class="cal-chip status-' + d.status + '">' + escapeHtml(label) + '</span>';
+        }).join('') +
+        (items.length > 3 ? '<span class="cal-chip">+' + (items.length - 3) + '</span>' : '') +
+        '</div>';
+      cell.addEventListener('click', function(){ openDayModal(this.dataset.iso); });
+      grid.appendChild(cell);
+    }
+  }
+
+  function openDayModal(iso){
+    dayModalIso = iso;
+    var d = new Date(iso + 'T00:00:00');
+    document.getElementById('dayModalTitle').textContent = d.toLocaleDateString('pt-BR', {day:'2-digit', month:'long'});
+    var items = state.demands.filter(function(x){ return x.dueDate === iso; });
+    var list = document.getElementById('dayList');
+    if(items.length === 0){
+      list.innerHTML = '<p class="empty-hint">Nenhuma demanda com prazo neste dia.</p>';
+    }else{
+      list.innerHTML = items.map(function(x){
+        var client = clientById(x.clientId);
+        return '<div class="day-item" data-id="' + x.id + '"><span>' + escapeHtml((client ? client.name + ' — ' : '') + x.title) + '</span><span class="priority-dot p-' + x.priority + '"></span></div>';
+      }).join('');
+      list.querySelectorAll('.day-item').forEach(function(el){
+        el.addEventListener('click', function(){
+          closeModal('dayModal');
+          openDemandModal(el.dataset.id);
+        });
+      });
+    }
+    document.getElementById('dayModal').hidden = false;
+  }
+
+  function renderClients(){
+    var grid = document.getElementById('clientsGrid');
+    var filtered = state.clients.filter(function(c){ return matchesSearch(c.name) || matchesSearch(c.handle); });
+    grid.innerHTML = filtered.map(function(c){
+      var openCount = state.demands.filter(function(d){ return d.clientId === c.id && d.status !== 'done'; }).length;
+      var overloaded = openCount > (state.settings.clientLimit || 5);
+      return '' +
+        '<div class="client-card" data-id="' + c.id + '">' +
+          '<div class="client-head">' +
+            '<span class="client-avatar" style="background:' + colorFor(c.id) + '">' + escapeHtml(initials(c.name)) + '</span>' +
+            '<div><div class="client-name">' + escapeHtml(c.name) + '</div>' + (c.handle ? '<div class="client-handle">' + escapeHtml(c.handle) + '</div>' : '') + '</div>' +
+          '</div>' +
+          (c.notes ? '<p class="client-notes">' + escapeHtml(c.notes) + '</p>' : '<p class="client-notes"></p>') +
+          '<div class="client-foot"><span class="client-count' + (overloaded ? ' overload' : '') + '">' + (overloaded ? '⚠ ' : '') + openCount + ' demanda(s) em aberto</span><button class="btn btn-ghost btn-sm" data-edit-client="' + c.id + '">Editar</button></div>' +
+        '</div>';
+    }).join('') + '<button class="client-new-tile" id="clientNewTile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Novo cliente</button>';
+
+    grid.querySelectorAll('[data-edit-client]').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); openClientModal(btn.dataset.editClient); });
+    });
+    var tile = document.getElementById('clientNewTile');
+    if(tile) tile.addEventListener('click', function(){ openClientModal(null); });
+  }
+
+  function fillClientSelect(selectEl, includeNone){
+    var current = selectEl.value;
+    selectEl.innerHTML = (includeNone ? '<option value="">— Sem cliente —</option>' : '') + state.clients.map(function(c){
+      return '<option value="' + c.id + '">' + escapeHtml(c.name) + '</option>';
+    }).join('');
+    if(current) selectEl.value = current;
+  }
+
+  function renderClientSelect(){
+    fillClientSelect(document.getElementById('demandClient'), true);
+  }
+
+  function renderChecklistEditor(){
+    var container = document.getElementById('checklistItems');
+    container.innerHTML = modalChecklist.map(function(item, idx){
+      return '<div class="checklist-item' + (item.done ? ' done' : '') + '">' +
+        '<input type="checkbox" data-idx="' + idx + '"' + (item.done ? ' checked' : '') + '>' +
+        '<input type="text" data-idx="' + idx + '" value="' + escapeHtml(item.text) + '">' +
+        '<button type="button" class="checklist-remove" data-idx="' + idx + '">✕</button>' +
+      '</div>';
+    }).join('');
+    container.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      cb.addEventListener('change', function(){ modalChecklist[+this.dataset.idx].done = this.checked; renderChecklistEditor(); });
+    });
+    container.querySelectorAll('input[type=text]').forEach(function(inp){
+      inp.addEventListener('input', function(){ modalChecklist[+this.dataset.idx].text = this.value; });
+    });
+    container.querySelectorAll('.checklist-remove').forEach(function(btn){
+      btn.addEventListener('click', function(){ modalChecklist.splice(+this.dataset.idx, 1); renderChecklistEditor(); });
+    });
+    var doneCount = modalChecklist.filter(function(i){ return i.done; }).length;
+    var total = modalChecklist.length;
+    var prog = document.getElementById('checklistProgress');
+    prog.hidden = total === 0;
+    if(total > 0){
+      document.getElementById('checklistProgressBar').style.width = Math.round(doneCount / total * 100) + '%';
+      document.getElementById('checklistProgressText').textContent = doneCount + '/' + total;
+    }
+  }
+
+  function addChecklistItem(){
+    var input = document.getElementById('checklistInput');
+    var val = input.value.trim();
+    if(!val) return;
+    modalChecklist.push({ id: uid(), text: val, done: false });
+    input.value = '';
+    renderChecklistEditor();
+    input.focus();
+  }
+
+  function renderTagListEdit(){
+    var container = document.getElementById('tagListEdit');
+    container.innerHTML = modalTags.map(function(t, idx){
+      return '<span class="tag-chip removable" data-idx="' + idx + '"><span class="tag-dot" style="background:' + colorFor(t) + '"></span>' + escapeHtml(t) + ' ✕</span>';
+    }).join('');
+    container.querySelectorAll('.tag-chip').forEach(function(chip){
+      chip.addEventListener('click', function(){ modalTags.splice(+this.dataset.idx, 1); renderTagListEdit(); });
+    });
+  }
+
+  function addTag(){
+    var input = document.getElementById('tagInput');
+    var val = input.value.trim();
+    if(!val) return;
+    if(modalTags.indexOf(val) === -1) modalTags.push(val);
+    input.value = '';
+    renderTagListEdit();
+    input.focus();
+  }
+
+  function openDemandModal(id, prefill){
+    editingDemandId = id || null;
+    var d = id ? state.demands.find(function(x){ return x.id === id; }) : (prefill || {});
+    document.getElementById('demandModalTitle').textContent = id ? 'Editar demanda' : 'Nova demanda';
+    document.getElementById('demandClient').value = d.clientId || '';
+    document.getElementById('demandTitle').value = d.title || '';
+    document.getElementById('demandType').value = d.type || 'post';
+    document.getElementById('demandPriority').value = d.priority || 'normal';
+    document.getElementById('demandDue').value = d.dueDate || '';
+    document.getElementById('demandStatus').value = d.status || 'todo';
+    document.getElementById('demandBriefing').value = d.briefing || '';
+    document.getElementById('demandLink').value = d.link || '';
+    modalChecklist = (d.checklist || []).map(function(i){ return { id: i.id || uid(), text: i.text, done: !!i.done }; });
+    modalTags = (d.tags || []).slice();
+    renderChecklistEditor();
+    renderTagListEdit();
+    document.getElementById('demandWhatsAlert').checked = (d.priority || 'normal') === 'urgente';
+    document.getElementById('demandDeleteBtn').style.display = id ? 'inline-flex' : 'none';
+    document.getElementById('voiceOriginNote').hidden = !(d.source === 'voz');
+    document.getElementById('demandModal').hidden = false;
+    document.getElementById('demandTitle').focus();
+  }
+
+  function currentDemandFormValues(){
+    return {
+      clientId: document.getElementById('demandClient').value,
+      title: document.getElementById('demandTitle').value.trim() || '(sem nome)',
+      priority: document.getElementById('demandPriority').value,
+      dueDate: document.getElementById('demandDue').value,
+      briefing: document.getElementById('demandBriefing').value.trim()
+    };
+  }
+
+  function saveDemandFromModal(){
+    var title = document.getElementById('demandTitle').value.trim();
+    if(!title){ showToast('Dê um nome para a atividade.'); return; }
+    var payload = {
+      clientId: document.getElementById('demandClient').value,
+      title: title,
+      type: document.getElementById('demandType').value,
+      priority: document.getElementById('demandPriority').value,
+      dueDate: document.getElementById('demandDue').value,
+      status: document.getElementById('demandStatus').value,
+      briefing: document.getElementById('demandBriefing').value.trim(),
+      link: document.getElementById('demandLink').value.trim(),
+      tags: modalTags.slice(),
+      checklist: modalChecklist.filter(function(i){ return i.text.trim(); })
+    };
+    var savedDemand;
+    if(editingDemandId){
+      savedDemand = state.demands.find(function(x){ return x.id === editingDemandId; });
+      Object.assign(savedDemand, payload);
+    }else{
+      payload.id = uid();
+      payload.createdAt = new Date().toISOString();
+      state.demands.unshift(payload);
+      savedDemand = payload;
+    }
+    saveState();
+    var wantsAlert = document.getElementById('demandWhatsAlert').checked;
+    closeModal('demandModal');
+    renderAll();
+    showToast('Demanda salva.');
+    if(wantsAlert) sendWhatsAppReminder(savedDemand);
+  }
+
+  function deleteDemand(){
+    if(!editingDemandId) return;
+    if(!confirm('Excluir esta demanda?')) return;
+    state.demands = state.demands.filter(function(d){ return d.id !== editingDemandId; });
+    saveState();
+    closeModal('demandModal');
+    renderAll();
+    showToast('Demanda excluída.');
+  }
+
+  function openClientModal(id){
+    editingClientId = id || null;
+    var c = id ? clientById(id) : {};
+    document.getElementById('clientModalTitle').textContent = id ? 'Editar cliente' : 'Novo cliente';
+    document.getElementById('clientName').value = c.name || '';
+    document.getElementById('clientHandle').value = c.handle || '';
+    document.getElementById('clientContact').value = c.contact || '';
+    document.getElementById('clientNotes').value = c.notes || '';
+    document.getElementById('clientDeleteBtn').style.display = id ? 'inline-flex' : 'none';
+    document.getElementById('clientModal').hidden = false;
+    document.getElementById('clientName').focus();
+  }
+
+  function saveClientFromModal(){
+    var name = document.getElementById('clientName').value.trim();
+    if(!name){ showToast('Dê um nome para o cliente.'); return; }
+    var payload = {
+      name: name,
+      handle: document.getElementById('clientHandle').value.trim(),
+      contact: document.getElementById('clientContact').value.trim(),
+      notes: document.getElementById('clientNotes').value.trim()
+    };
+    if(editingClientId){
+      Object.assign(clientById(editingClientId), payload);
+    }else{
+      payload.id = uid();
+      state.clients.push(payload);
+    }
+    saveState();
+    closeModal('clientModal');
+    renderAll();
+    showToast('Cliente salvo.');
+  }
+
+  function deleteClient(){
+    if(!editingClientId) return;
+    var inUse = state.demands.some(function(d){ return d.clientId === editingClientId; });
+    if(inUse && !confirm('Este cliente tem demandas associadas. Elas ficarão sem cliente. Continuar?')) return;
+    else if(!inUse && !confirm('Excluir este cliente?')) return;
+    state.demands.forEach(function(d){ if(d.clientId === editingClientId) d.clientId = ''; });
+    state.clients = state.clients.filter(function(c){ return c.id !== editingClientId; });
+    saveState();
+    closeModal('clientModal');
+    renderAll();
+    showToast('Cliente excluído.');
+  }
+
+  function closeModal(id){ document.getElementById(id).hidden = true; }
+
+  var WEEKDAYS = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+  function parseDueDate(text){
+    var norm = stripAccents(text.toLowerCase());
+    var today = todayMidnight();
+    if(/\bhoje\b/.test(norm)) return isoDate(today);
+    if(/depois de amanha/.test(norm)) return isoDate(addDays(today, 2));
+    if(/\bamanha\b/.test(norm)) return isoDate(addDays(today, 1));
+    var m = norm.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+    if(m){
+      var day = +m[1], month = +m[2] - 1;
+      var year = m[3] ? (m[3].length === 2 ? 2000 + (+m[3]) : +m[3]) : today.getFullYear();
+      var d1 = new Date(year, month, day);
+      if(!m[3] && d1 < today) d1.setFullYear(d1.getFullYear() + 1);
+      return isoDate(d1);
+    }
+    m = norm.match(/\bdia (\d{1,2})\b/);
+    if(m){
+      var dnum = +m[1];
+      var d2 = new Date(today.getFullYear(), today.getMonth(), dnum);
+      if(d2 < today) d2.setMonth(d2.getMonth() + 1);
+      return isoDate(d2);
+    }
+    if(/semana que vem|proxima semana/.test(norm)) return isoDate(addDays(today, 7));
+    for(var i = 0; i < WEEKDAYS.length; i++){
+      if(norm.indexOf(WEEKDAYS[i]) !== -1){
+        var diff = (i - today.getDay() + 7) % 7;
+        if(diff === 0) diff = 7;
+        return isoDate(addDays(today, diff));
+      }
+    }
+    return '';
+  }
+
+  function matchClient(text){
+    var norm = stripAccents(text.toLowerCase());
+    var best = null, bestLen = 0;
+    state.clients.forEach(function(c){
+      var candidates = [c.name];
+      if(c.handle) candidates.push(c.handle.replace('@',''));
+      candidates.forEach(function(cand){
+        var cnorm = stripAccents(cand.toLowerCase());
+        var parts = cnorm.split(/\s+/).concat([cnorm]);
+        parts.forEach(function(p){
+          if(p.length >= 3 && norm.indexOf(p) !== -1 && p.length > bestLen){ best = c; bestLen = p.length; }
+        });
+      });
+    });
+    return best;
+  }
+
+  function detectPriority(text){
+    var norm = stripAccents(text.toLowerCase());
+    if(/urgente|pra ja|hoje mesmo/.test(norm)) return 'urgente';
+    if(/prioridade alta|com pressa|importante/.test(norm)) return 'alta';
+    return 'normal';
+  }
+
+  function createDemandFromVoice(transcript){
+    transcript = transcript.trim();
+    if(!transcript){ showToast('Não entendi o áudio, tente novamente.'); return; }
+    var client = matchClient(transcript);
+    var due = parseDueDate(transcript);
+    var priority = detectPriority(transcript);
+    var title = transcript.replace(/[.]+$/, '');
+    if(title.length > 80) title = title.slice(0, 80).trim() + '…';
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    var demand = {
+      id: uid(),
+      clientId: client ? client.id : '',
+      title: title,
+      type: 'outro',
+      briefing: transcript,
+      link: '',
+      tags: [],
+      checklist: [],
+      priority: priority,
+      status: 'todo',
+      dueDate: due,
+      createdAt: new Date().toISOString(),
+      source: 'voz'
+    };
+    state.demands.unshift(demand);
+    saveState();
+    renderAll();
+    showToast('Demanda criada por voz' + (client ? ' — ' + client.name : '') + (due ? ' · prazo ' + formatDatePt(due) : ''));
+    openDemandModal(demand.id);
+  }
+
+  var recognition = null;
+  var listening = false;
+  function getRecognition(){
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    var r = new SR();
+    r.lang = 'pt-BR';
+    r.continuous = false;
+    r.interimResults = true;
+    r.maxAlternatives = 1;
+    return r;
+  }
+
+  function startListening(){
+    recognition = getRecognition();
+    if(!recognition){
+      showToast('Reconhecimento de voz não é suportado neste navegador. Use Chrome ou Edge.');
+      return;
+    }
+    var finalTranscript = '';
+    document.getElementById('voiceTranscript').textContent = '—';
+    document.getElementById('voiceOverlay').hidden = false;
+    document.getElementById('micFab').classList.add('listening');
+    listening = true;
+
+    recognition.onresult = function(e){
+      var interim = '';
+      for(var i = e.resultIndex; i < e.results.length; i++){
+        var text = e.results[i][0].transcript;
+        if(e.results[i].isFinal) finalTranscript += text;
+        else interim += text;
+      }
+      document.getElementById('voiceTranscript').textContent = (finalTranscript + ' ' + interim).trim() || '—';
+    };
+    recognition.onerror = function(){
+      stopListening();
+      showToast('Não foi possível captar o áudio. Verifique a permissão do microfone.');
+    };
+    recognition.onend = function(){
+      stopListening();
+      if(finalTranscript.trim()) createDemandFromVoice(finalTranscript);
+    };
+    try{ recognition.start(); }catch(e){ stopListening(); }
+  }
+
+  function stopListening(){
+    listening = false;
+    document.getElementById('voiceOverlay').hidden = true;
+    document.getElementById('micFab').classList.remove('listening');
+    if(recognition){ try{ recognition.stop(); }catch(e){} }
+  }
+
+  function exportData(){
+    var blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'dgr-demandas-backup-' + isoDate(new Date()) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('Backup exportado.');
+  }
+
+  function importData(file){
+    var reader = new FileReader();
+    reader.onload = function(){
+      try{
+        var data = JSON.parse(reader.result);
+        if(!Array.isArray(data.clients) || !Array.isArray(data.demands)) throw new Error('formato inválido');
+        if(!confirm('Isso vai substituir os dados atuais pelos do arquivo importado. Continuar?')) return;
+        state = data;
+        saveState();
+        renderAll();
+        showToast('Dados importados com sucesso.');
+      }catch(e){
+        showToast('Arquivo inválido.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchView(btn.dataset.view); });
+  });
+
+  document.getElementById('searchInput').addEventListener('input', function(e){
+    searchTerm = stripAccents(e.target.value.toLowerCase());
+    renderBoard();
+    renderClients();
+  });
+
+  document.getElementById('newDemandBtn').addEventListener('click', function(){ openDemandModal(null); });
+  document.getElementById('demandCloseBtn').addEventListener('click', function(){ closeModal('demandModal'); });
+  document.getElementById('demandSaveBtn').addEventListener('click', saveDemandFromModal);
+  document.getElementById('demandDeleteBtn').addEventListener('click', deleteDemand);
+  document.getElementById('demandModal').addEventListener('click', function(e){ if(e.target === this) closeModal('demandModal'); });
+  document.getElementById('demandPriority').addEventListener('change', function(e){
+    document.getElementById('demandWhatsAlert').checked = e.target.value === 'urgente';
+  });
+  document.getElementById('demandWaNowBtn').addEventListener('click', function(){
+    sendWhatsAppReminder(currentDemandFormValues());
+  });
+  document.getElementById('tagAddBtn').addEventListener('click', addTag);
+  document.getElementById('tagInput').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); addTag(); } });
+  document.getElementById('checklistAddBtn').addEventListener('click', addChecklistItem);
+  document.getElementById('checklistInput').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); addChecklistItem(); } });
+
+  document.getElementById('urgencyFilters').addEventListener('click', function(e){
+    var btn = e.target.closest('.urg-chip');
+    if(!btn) return;
+    urgencyFilter = btn.dataset.urg;
+    document.querySelectorAll('.urg-chip').forEach(function(c){ c.classList.toggle('active', c === btn); });
+    renderBoard();
+  });
+
+  document.getElementById('groupToggle').addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-group]');
+    if(!btn) return;
+    boardGroupBy = btn.dataset.group;
+    document.querySelectorAll('#groupToggle button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+    renderBoard();
+  });
+
+  document.getElementById('digestBtn').addEventListener('click', sendDailyDigest);
+
+  document.getElementById('settingsBtn').addEventListener('click', openSettingsModal);
+  document.getElementById('settingsCloseBtn').addEventListener('click', function(){ closeModal('settingsModal'); });
+  document.getElementById('settingsSaveBtn').addEventListener('click', saveSettingsFromModal);
+  document.getElementById('settingsModal').addEventListener('click', function(e){ if(e.target === this) closeModal('settingsModal'); });
+
+  document.getElementById('recurringBtn').addEventListener('click', openRecurringModal);
+  document.getElementById('recurringCloseBtn').addEventListener('click', function(){ closeModal('recurringModal'); });
+  document.getElementById('recurringModal').addEventListener('click', function(e){ if(e.target === this) closeModal('recurringModal'); });
+  document.getElementById('recAddBtn').addEventListener('click', addRecurringTemplate);
+  document.getElementById('recFreq').addEventListener('change', function(e){
+    document.getElementById('recWeekdayField').hidden = e.target.value !== 'weekly';
+    document.getElementById('recDayField').hidden = e.target.value === 'weekly';
+  });
+
+  document.getElementById('packageBtn').addEventListener('click', openPackageModal);
+  document.getElementById('packageCloseBtn').addEventListener('click', function(){ closeModal('packageModal'); });
+  document.getElementById('packageModal').addEventListener('click', function(e){ if(e.target === this) closeModal('packageModal'); });
+  document.getElementById('pkgAddRowBtn').addEventListener('click', function(){
+    pkgRows.push({ title: '', type: 'post', priority: 'normal', dueDate: '' });
+    renderPackageRows();
+  });
+  document.getElementById('pkgTemplateSelect').addEventListener('change', function(e){
+    var t = (state.packageTemplates || []).find(function(x){ return x.id === e.target.value; });
+    pkgRows = t ? t.items.map(function(i){ return { title: i.title, type: i.type, priority: i.priority, dueDate: '' }; }) : [{ title: '', type: 'post', priority: 'normal', dueDate: '' }];
+    renderPackageRows();
+  });
+  document.getElementById('pkgSaveTemplate').addEventListener('change', function(e){
+    document.getElementById('pkgTemplateNameField').hidden = !e.target.checked;
+  });
+  document.getElementById('pkgCreateBtn').addEventListener('click', createPackageDemands);
+
+  document.getElementById('clientCloseBtn').addEventListener('click', function(){ closeModal('clientModal'); });
+  document.getElementById('clientSaveBtn').addEventListener('click', saveClientFromModal);
+  document.getElementById('clientDeleteBtn').addEventListener('click', deleteClient);
+  document.getElementById('clientModal').addEventListener('click', function(e){ if(e.target === this) closeModal('clientModal'); });
+
+  document.getElementById('dayCloseBtn').addEventListener('click', function(){ closeModal('dayModal'); });
+  document.getElementById('dayModal').addEventListener('click', function(e){ if(e.target === this) closeModal('dayModal'); });
+  document.getElementById('dayNewBtn').addEventListener('click', function(){
+    closeModal('dayModal');
+    openDemandModal(null, {dueDate: dayModalIso});
+  });
+
+  document.getElementById('calPrev').addEventListener('click', function(){ calMonth.setMonth(calMonth.getMonth() - 1); renderCalendar(); });
+  document.getElementById('calNext').addEventListener('click', function(){ calMonth.setMonth(calMonth.getMonth() + 1); renderCalendar(); });
+  document.getElementById('calToday').addEventListener('click', function(){ calMonth = new Date(); calMonth.setDate(1); renderCalendar(); });
+
+  document.getElementById('micFab').addEventListener('click', function(){
+    if(listening) stopListening();
+    else startListening();
+  });
+  document.getElementById('voiceCancelBtn').addEventListener('click', stopListening);
+
+  document.getElementById('exportBtn').addEventListener('click', exportData);
+  document.getElementById('importBtn').addEventListener('click', function(){ document.getElementById('importFile').click(); });
+  document.getElementById('importFile').addEventListener('change', function(e){
+    if(e.target.files[0]) importData(e.target.files[0]);
+    e.target.value = '';
+  });
+
+  ensureRecurringInstances();
+  renderAll();
+})();
+</script>
+</body>
+</html>
