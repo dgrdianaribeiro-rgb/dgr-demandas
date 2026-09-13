@@ -73,15 +73,17 @@
   .view{display:none;}
   .view.active{display:block;}
 
-  .board-columns{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;}
+  .board-columns{display:grid;grid-template-columns:repeat(6,minmax(210px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;}
   @media (max-width:900px){.board-columns{grid-auto-flow:column;grid-auto-columns:82vw;grid-template-columns:none;}}
   .board-col{background:var(--paper-dim);border-radius:18px;padding:12px;display:flex;flex-direction:column;min-height:200px;}
   .col-head{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-70);}
   .col-head .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;}
+  .col-backlog .dot{background:#7a2ee6;}
   .col-todo .dot{background:var(--ink-35);}
   .col-doing .dot{background:var(--volt);}
   .col-review .dot{background:var(--acid);border:1px solid rgba(0,0,0,.3);}
   .col-done .dot{background:var(--done);}
+  .col-cancelled .dot{background:var(--danger);}
   .col-count{background:#fff;border-radius:999px;padding:2px 9px;font-size:10px;color:var(--ink-45);}
   .col-body{display:flex;flex-direction:column;gap:10px;flex:1;min-height:80px;border-radius:12px;transition:background .12s ease;padding:2px;}
   .col-body.drag-over{background:rgba(33,0,255,.08);}
@@ -94,6 +96,9 @@
   .card.prio-normal{border-left-color:var(--volt);}
   .card.prio-alta{border-left-color:var(--warn);}
   .card.prio-urgente{border-left-color:var(--danger);}
+  .card.cancelled{opacity:.55;}
+  .card.cancelled .card-title{text-decoration:line-through;}
+  .wt-pill{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:rgba(122,46,230,.14);color:#5b1fb0;white-space:nowrap;flex:none;}
   .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
   .client-chip{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--ink-60);}
   .client-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex:none;}
@@ -148,6 +153,8 @@
   .cal-chip.status-done{text-decoration:line-through;opacity:.55;}
   .cal-chip.status-doing{background:rgba(33,0,255,.12);}
   .cal-chip.status-review{background:rgba(247,255,28,.5);}
+  .cal-chip.status-backlog{background:rgba(122,46,230,.14);}
+  .cal-chip.status-cancelled{text-decoration:line-through;opacity:.5;}
   @media (max-width:760px){.cal-cell{min-height:60px;}.cal-chip{display:none;}.cal-cell.has-items::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--volt);}}
 
   .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
@@ -315,6 +322,12 @@
     </div>
   </div>
 
+  <div class="group-toggle" id="workTypeFilter" style="margin-bottom:18px">
+    <button class="active" data-worktype="all">Todas as frentes</button>
+    <button data-worktype="social">Social Media</button>
+    <button data-worktype="captacao">Captação de vídeo</button>
+  </div>
+
   <section id="viewBoard" class="view active">
     <div class="alert-banner" id="alertBanner">
       <div class="alert-banner-head">
@@ -392,16 +405,18 @@
     </div>
     <div class="grid-2">
       <div class="field">
-        <label for="demandType">Tipo</label>
-        <select id="demandType">
-          <option value="post">Post estático</option>
-          <option value="carrossel">Carrossel</option>
-          <option value="video">Vídeo / Reels</option>
-          <option value="stories">Stories</option>
-          <option value="reuniao">Reunião</option>
-          <option value="outro">Outro</option>
+        <label for="demandWorkType">Frente de trabalho</label>
+        <select id="demandWorkType">
+          <option value="social">Social Media</option>
+          <option value="captacao">Captação de vídeo</option>
         </select>
       </div>
+      <div class="field">
+        <label for="demandType">Tipo</label>
+        <select id="demandType"></select>
+      </div>
+    </div>
+    <div class="grid-2">
       <div class="field">
         <label for="demandPriority">Prioridade</label>
         <select id="demandPriority">
@@ -411,20 +426,26 @@
           <option value="urgente">Urgente</option>
         </select>
       </div>
-    </div>
-    <div class="grid-2">
-      <div class="field">
-        <label for="demandDue">Prazo</label>
-        <input type="date" id="demandDue">
-      </div>
       <div class="field">
         <label for="demandStatus">Status</label>
         <select id="demandStatus">
+          <option value="backlog">Backlog</option>
           <option value="todo">A Fazer</option>
           <option value="doing">Em andamento</option>
           <option value="review">Em revisão</option>
           <option value="done">Concluído</option>
+          <option value="cancelled">Cancelado</option>
         </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="demandDue">Prazo / data</label>
+        <input type="date" id="demandDue">
+      </div>
+      <div class="field">
+        <label for="demandTime">Horário (opcional)</label>
+        <input type="time" id="demandTime">
       </div>
     </div>
     <div class="field">
@@ -648,18 +669,28 @@
   'use strict';
   var LS_KEY = 'dgr_demandas_v1';
   var STATUS = [
+    {id:'backlog', label:'Backlog', cls:'col-backlog'},
     {id:'todo', label:'A Fazer', cls:'col-todo'},
     {id:'doing', label:'Em andamento', cls:'col-doing'},
     {id:'review', label:'Em revisão', cls:'col-review'},
-    {id:'done', label:'Concluído', cls:'col-done'}
+    {id:'done', label:'Concluído', cls:'col-done'},
+    {id:'cancelled', label:'Cancelado', cls:'col-cancelled'}
   ];
-  var TYPE_LABEL = {post:'Post', carrossel:'Carrossel', video:'Vídeo', stories:'Stories', reuniao:'Reunião', outro:'Outro'};
+  var TYPE_LABEL_SOCIAL = {post:'Post', carrossel:'Carrossel', video:'Vídeo', stories:'Stories', reuniao:'Reunião', outro:'Outro'};
+  var TYPE_LABEL_CAPTACAO = {casamento:'Casamento', batizado:'Batizado', aniversario:'Aniversário', formatura:'Formatura', ensaio:'Ensaio', realtime:'Realtime / cobertura', outro:'Outro'};
+  var TYPE_LABEL = Object.assign({}, TYPE_LABEL_SOCIAL, TYPE_LABEL_CAPTACAO);
   var DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
   var WEEKDAY_LABELS = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
   var CLIENT_COLORS = ['#2100ff','#160092','#e13b3b','#ff8a00','#1f9d55','#7a2ee6','#0a8f9e'];
 
-  function typeOptionsHtml(sel){
-    return Object.keys(TYPE_LABEL).map(function(k){ return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + TYPE_LABEL[k] + '</option>'; }).join('');
+  function typeLabelsFor(workType){ return workType === 'captacao' ? TYPE_LABEL_CAPTACAO : TYPE_LABEL_SOCIAL; }
+  function typeOptionsHtml(labels, sel){
+    return Object.keys(labels).map(function(k){ return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + labels[k] + '</option>'; }).join('');
+  }
+  function populateTypeSelect(workType, selected){
+    var labels = typeLabelsFor(workType);
+    var keep = selected && labels[selected] ? selected : Object.keys(labels)[0];
+    document.getElementById('demandType').innerHTML = typeOptionsHtml(labels, keep);
   }
   function priorityOptionsHtml(sel){
     return ['baixa','normal','alta','urgente'].map(function(k){ return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + k.charAt(0).toUpperCase() + k.slice(1) + '</option>'; }).join('');
@@ -725,6 +756,7 @@
   var currentView = 'board';
   var searchTerm = '';
   var urgencyFilter = 'all';
+  var workTypeFilter = 'all';
   var boardGroupBy = 'status';
   var calMonth = new Date(); calMonth.setDate(1);
   var editingDemandId = null;
@@ -761,11 +793,18 @@
 
   function digitsOnly(s){ return String(s || '').replace(/\D/g, ''); }
 
+  function dueLabel(d){
+    var base = d.dueDate ? formatDatePt(d.dueDate) : 'sem prazo';
+    if(d.dueDate && d.dueTime) base += ' · ' + d.dueTime;
+    return base;
+  }
+
   function reminderMessage(d){
     var client = clientById(d.clientId);
     var lines = ['*Lembrete Dgr Creative*', d.title];
     if(client) lines.push('Cliente: ' + client.name);
-    if(d.dueDate) lines.push('Prazo: ' + formatDatePt(d.dueDate));
+    if(d.dueDate) lines.push('Prazo: ' + formatDatePt(d.dueDate) + (d.dueTime ? ' às ' + d.dueTime : ''));
+    lines.push('Frente: ' + (d.workType === 'captacao' ? 'Captação de vídeo' : 'Social Media'));
     lines.push('Prioridade: ' + d.priority);
     if(d.briefing) lines.push('Briefing: ' + d.briefing);
     if(d.link) lines.push('Link: ' + d.link);
@@ -926,7 +965,7 @@
     container.innerHTML = pkgRows.map(function(r, idx){
       return '<div class="package-row">' +
         '<input type="text" data-field="title" data-idx="' + idx + '" placeholder="Nome da atividade" value="' + escapeHtml(r.title) + '">' +
-        '<select data-field="type" data-idx="' + idx + '">' + typeOptionsHtml(r.type) + '</select>' +
+        '<select data-field="type" data-idx="' + idx + '">' + typeOptionsHtml(TYPE_LABEL_SOCIAL, r.type) + '</select>' +
         '<select data-field="priority" data-idx="' + idx + '">' + priorityOptionsHtml(r.priority) + '</select>' +
         '<input type="date" data-field="dueDate" data-idx="' + idx + '" value="' + (r.dueDate || '') + '">' +
         '<button type="button" class="package-row-remove" data-idx="' + idx + '">✕</button>' +
@@ -984,10 +1023,11 @@
   }
 
   function isUrgentItem(d){
-    if(d.status === 'done') return false;
+    if(d.status === 'done' || d.status === 'cancelled') return false;
     var u = dueUrgency(d.dueDate);
     return d.priority === 'urgente' || u === 'overdue' || u === 'soon';
   }
+  function isOpenDemand(d){ return d.status !== 'done' && d.status !== 'cancelled'; }
 
   function renderAlertBanner(){
     var banner = document.getElementById('alertBanner');
@@ -1049,7 +1089,7 @@
     var client = clientById(d.clientId);
     var urgency = dueUrgency(d.dueDate);
     var dueClass = urgency === 'overdue' ? ' due-overdue' : (urgency === 'soon' ? ' due-soon' : '');
-    var dueText = d.dueDate ? formatDatePt(d.dueDate) : 'sem prazo';
+    var dueText = dueLabel(d);
     var tags = d.tags || [];
     var checklist = d.checklist || [];
     var tagsHtml = tags.length ? '<div class="card-tags">' + tags.slice(0, 3).map(tagChipHtml).join('') + (tags.length > 3 ? '<span class="tag-chip">+' + (tags.length - 3) + '</span>' : '') + '</div>' : '';
@@ -1059,12 +1099,15 @@
       checklistHtml = '<div class="checklist-progress"><div class="checklist-progress-bar"><span style="width:' + Math.round(doneCount / checklist.length * 100) + '%"></span></div><b>' + doneCount + '/' + checklist.length + '</b></div>';
     }
     return '' +
-      '<div class="card prio-' + d.priority + '" draggable="true" data-id="' + d.id + '">' +
+      '<div class="card prio-' + d.priority + (d.status === 'cancelled' ? ' cancelled' : '') + '" draggable="true" data-id="' + d.id + '">' +
         '<div class="card-top">' +
           '<span class="client-chip">' +
             (client ? '<span class="client-dot" style="background:' + colorFor(client.id) + '">' + escapeHtml(initials(client.name)) + '</span>' + escapeHtml(client.name) : '<span class="client-dot" style="background:var(--ink-35)">–</span>Sem cliente') +
           '</span>' +
-          priorityIndicator(d.priority) +
+          '<span style="display:flex;align-items:center;gap:6px">' +
+            (d.workType === 'captacao' ? '<span class="wt-pill">🎥 Captação</span>' : '') +
+            priorityIndicator(d.priority) +
+          '</span>' +
         '</div>' +
         tagsHtml +
         '<p class="card-title">' + (d.templateId ? '🔁 ' : '') + escapeHtml(d.title) + '</p>' +
@@ -1082,6 +1125,7 @@
   function filteredPool(){
     return state.demands.filter(function(d){
       return (urgencyFilter === 'all' || d.priority === urgencyFilter) &&
+        (workTypeFilter === 'all' || (d.workType || 'social') === workTypeFilter) &&
         (matchesSearch(d.title) || matchesSearch(d.briefing) || matchesSearch((clientById(d.clientId)||{}).name) || (d.tags||[]).some(matchesSearch));
     });
   }
@@ -1166,7 +1210,7 @@
     var groups = groupByClient(pool);
     if(groups.length === 0){ container.innerHTML = '<p class="empty-hint">Nenhuma demanda encontrada.</p>'; return; }
     groups.forEach(function(g){
-      var openCount = g.items.filter(function(d){ return d.status !== 'done'; }).length;
+      var openCount = g.items.filter(isOpenDemand).length;
       var overloaded = openCount > (state.settings.clientLimit || 5);
       var section = document.createElement('div');
       section.className = 'swimlane';
@@ -1215,14 +1259,16 @@
       else if(dayNum > daysInMonth){ cellDate = new Date(year, month + 1, dayNum - daysInMonth); otherMonth = true; }
       else { cellDate = new Date(year, month, dayNum); }
       var iso = isoDate(cellDate);
-      var items = state.demands.filter(function(d){ return d.dueDate === iso; });
+      var items = state.demands.filter(function(d){
+        return d.dueDate === iso && (workTypeFilter === 'all' || (d.workType || 'social') === workTypeFilter);
+      }).sort(function(a,b){ return (a.dueTime||'99:99').localeCompare(b.dueTime||'99:99'); });
       var cell = document.createElement('div');
       cell.className = 'cal-cell' + (otherMonth ? ' other' : '') + (iso === todayIso ? ' today' : '') + (items.length ? ' has-items' : '');
       cell.dataset.iso = iso;
       cell.innerHTML = '<span class="cal-num">' + cellDate.getDate() + '</span><div class="cal-items">' +
         items.slice(0, 3).map(function(d){
           var client = clientById(d.clientId);
-          var label = (client ? client.name.split(' ')[0] + ': ' : '') + d.title;
+          var label = (d.dueTime ? d.dueTime + ' ' : '') + (client ? client.name.split(' ')[0] + ': ' : '') + d.title;
           return '<span class="cal-chip status-' + d.status + '">' + escapeHtml(label) + '</span>';
         }).join('') +
         (items.length > 3 ? '<span class="cal-chip">+' + (items.length - 3) + '</span>' : '') +
@@ -1236,14 +1282,16 @@
     dayModalIso = iso;
     var d = new Date(iso + 'T00:00:00');
     document.getElementById('dayModalTitle').textContent = d.toLocaleDateString('pt-BR', {day:'2-digit', month:'long'});
-    var items = state.demands.filter(function(x){ return x.dueDate === iso; });
+    var items = state.demands.filter(function(x){
+      return x.dueDate === iso && (workTypeFilter === 'all' || (x.workType || 'social') === workTypeFilter);
+    }).sort(function(a,b){ return (a.dueTime||'99:99').localeCompare(b.dueTime||'99:99'); });
     var list = document.getElementById('dayList');
     if(items.length === 0){
       list.innerHTML = '<p class="empty-hint">Nenhuma demanda com prazo neste dia.</p>';
     }else{
       list.innerHTML = items.map(function(x){
         var client = clientById(x.clientId);
-        return '<div class="day-item" data-id="' + x.id + '"><span>' + escapeHtml((client ? client.name + ' — ' : '') + x.title) + '</span><span class="priority-dot p-' + x.priority + '"></span></div>';
+        return '<div class="day-item" data-id="' + x.id + '"><span>' + escapeHtml((x.dueTime ? x.dueTime + ' — ' : '') + (client ? client.name + ' — ' : '') + x.title) + '</span><span class="priority-dot p-' + x.priority + '"></span></div>';
       }).join('');
       list.querySelectorAll('.day-item').forEach(function(el){
         el.addEventListener('click', function(){
@@ -1259,7 +1307,7 @@
     var grid = document.getElementById('clientsGrid');
     var filtered = state.clients.filter(function(c){ return matchesSearch(c.name) || matchesSearch(c.handle); });
     grid.innerHTML = filtered.map(function(c){
-      var openCount = state.demands.filter(function(d){ return d.clientId === c.id && d.status !== 'done'; }).length;
+      var openCount = state.demands.filter(function(d){ return d.clientId === c.id && isOpenDemand(d); }).length;
       var overloaded = openCount > (state.settings.clientLimit || 5);
       return '' +
         '<div class="client-card" data-id="' + c.id + '">' +
@@ -1355,9 +1403,11 @@
     document.getElementById('demandModalTitle').textContent = id ? 'Editar demanda' : 'Nova demanda';
     document.getElementById('demandClient').value = d.clientId || '';
     document.getElementById('demandTitle').value = d.title || '';
-    document.getElementById('demandType').value = d.type || 'post';
+    document.getElementById('demandWorkType').value = d.workType || 'social';
+    populateTypeSelect(d.workType || 'social', d.type);
     document.getElementById('demandPriority').value = d.priority || 'normal';
     document.getElementById('demandDue').value = d.dueDate || '';
+    document.getElementById('demandTime').value = d.dueTime || '';
     document.getElementById('demandStatus').value = d.status || 'todo';
     document.getElementById('demandBriefing').value = d.briefing || '';
     document.getElementById('demandLink').value = d.link || '';
@@ -1376,8 +1426,10 @@
     return {
       clientId: document.getElementById('demandClient').value,
       title: document.getElementById('demandTitle').value.trim() || '(sem nome)',
+      workType: document.getElementById('demandWorkType').value,
       priority: document.getElementById('demandPriority').value,
       dueDate: document.getElementById('demandDue').value,
+      dueTime: document.getElementById('demandTime').value,
       briefing: document.getElementById('demandBriefing').value.trim()
     };
   }
@@ -1388,9 +1440,11 @@
     var payload = {
       clientId: document.getElementById('demandClient').value,
       title: title,
+      workType: document.getElementById('demandWorkType').value,
       type: document.getElementById('demandType').value,
       priority: document.getElementById('demandPriority').value,
       dueDate: document.getElementById('demandDue').value,
+      dueTime: document.getElementById('demandTime').value,
       status: document.getElementById('demandStatus').value,
       briefing: document.getElementById('demandBriefing').value.trim(),
       link: document.getElementById('demandLink').value.trim(),
@@ -1531,12 +1585,19 @@
     return 'normal';
   }
 
+  function detectWorkType(text){
+    var norm = stripAccents(text.toLowerCase());
+    if(/casamento|batizado|formatura|ensaio|captacao|filmagem|grava(r|cao)|cobertura|realtime/.test(norm)) return 'captacao';
+    return 'social';
+  }
+
   function createDemandFromVoice(transcript){
     transcript = transcript.trim();
     if(!transcript){ showToast('Não entendi o áudio, tente novamente.'); return; }
     var client = matchClient(transcript);
     var due = parseDueDate(transcript);
     var priority = detectPriority(transcript);
+    var workType = detectWorkType(transcript);
     var title = transcript.replace(/[.]+$/, '');
     if(title.length > 80) title = title.slice(0, 80).trim() + '…';
     title = title.charAt(0).toUpperCase() + title.slice(1);
@@ -1544,6 +1605,7 @@
       id: uid(),
       clientId: client ? client.id : '',
       title: title,
+      workType: workType,
       type: 'outro',
       briefing: transcript,
       link: '',
@@ -1552,6 +1614,7 @@
       priority: priority,
       status: 'todo',
       dueDate: due,
+      dueTime: '',
       createdAt: new Date().toISOString(),
       source: 'voz'
     };
@@ -1663,6 +1726,9 @@
   document.getElementById('demandPriority').addEventListener('change', function(e){
     document.getElementById('demandWhatsAlert').checked = e.target.value === 'urgente';
   });
+  document.getElementById('demandWorkType').addEventListener('change', function(e){
+    populateTypeSelect(e.target.value);
+  });
   document.getElementById('demandWaNowBtn').addEventListener('click', function(){
     sendWhatsAppReminder(currentDemandFormValues());
   });
@@ -1685,6 +1751,15 @@
     boardGroupBy = btn.dataset.group;
     document.querySelectorAll('#groupToggle button').forEach(function(b){ b.classList.toggle('active', b === btn); });
     renderBoard();
+  });
+
+  document.getElementById('workTypeFilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-worktype]');
+    if(!btn) return;
+    workTypeFilter = btn.dataset.worktype;
+    document.querySelectorAll('#workTypeFilter button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+    renderBoard();
+    renderCalendar();
   });
 
   document.getElementById('digestBtn').addEventListener('click', sendDailyDigest);
