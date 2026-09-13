@@ -226,6 +226,9 @@
   .field label{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-60);}
   .field input,.field select,.field textarea{font-family:'Manrope',sans-serif;font-size:15px;color:var(--ink);border:1.5px solid var(--border);border-radius:12px;padding:11px 13px;background:var(--surface);width:100%;}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--volt);}
+  select{color-scheme:light dark;}
+  [data-theme="dark"] select{color-scheme:dark;}
+  select option{background:var(--surface);color:var(--ink);}
   .field textarea{resize:vertical;min-height:80px;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media (max-width:480px){.grid-2{grid-template-columns:1fr;}}
